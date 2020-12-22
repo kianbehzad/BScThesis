@@ -1,0 +1,3 @@
+[submodule "grSim"]
+	path = grSim
+	url = https://github.com/RoboCup-SSL/grSim.git
