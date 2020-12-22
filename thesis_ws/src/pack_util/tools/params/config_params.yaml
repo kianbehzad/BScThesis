@@ -1,0 +1,22 @@
+grsim_node:
+  ros__parameters:
+    grsim_command_listen_port: 50051
+    grsim_ip: "127.0.0.1"
+vision_node:
+  ros__parameters:
+    vision_multicast_port: 50055
+    vision_multicast_ip: "224.5.23.2"
+worldmodel_node:
+  ros__parameters:
+    is_simulation: True
+    is_our_side_left: True
+    is_our_color_yellow: True
+    cam_num: 1
+    camera_0: True
+    camera_1: False
+    camera_2: False
+    camera_3: False
+    camera_4: False
+    camera_5: False
+    camera_6: False
+    camera_7: False
