@@ -3,10 +3,6 @@ build-*/
 .DS_Store
 .idea/
 
-# protobuf compiled files
-*.pb.h
-*.pb.cc
-
 # Cmake junks
 CMakeLists.txt.user
 cmake-build-debug/
