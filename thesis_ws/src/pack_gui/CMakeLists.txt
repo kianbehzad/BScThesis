@@ -44,6 +44,10 @@ add_executable(interface
 #        src/interface/interface_node.cpp
         src/interface/mainwindow/mainwindow.cpp
         include/pack_gui/interface/mainwindow/mainwindow.h # for Qt MOC
+        src/interface/mainwindow/dynamic_reconfigure/dynamic_reconfigure.cpp
+        include/pack_gui/interface/mainwindow/dynamic_reconfigure/dynamic_reconfigure.h # for Qt MOC
+        src/interface/mainwindow/dynamic_reconfigure/param_widget.cpp
+        include/pack_gui/interface/mainwindow/dynamic_reconfigure/param_widget.h # for Qt MOC
         )
 ament_target_dependencies(interface rclcpp)
 target_link_libraries(interface ${QT5_LIBRARIES})

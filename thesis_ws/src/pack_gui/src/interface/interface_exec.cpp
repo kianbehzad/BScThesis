@@ -14,6 +14,8 @@ std::vector<std::string> extern_argv;
 
 int main(int argc, char * argv[])
 {
+    rclcpp::init(argc, argv); // TODO it can be moved to the thread
+
     // define extern_argv
     for(int i{}; i < argc; i++)
         extern_argv.push_back(argv[i]);

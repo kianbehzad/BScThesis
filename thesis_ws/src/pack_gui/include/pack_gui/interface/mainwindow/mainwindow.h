@@ -6,7 +6,9 @@
 #define PACK_GUI_MAINWINDOW_H
 
 #include "pack_gui/interface/extern_variables.h"
+#include "pack_gui/interface/mainwindow/dynamic_reconfigure/dynamic_reconfigure.h"
 #include <QMainWindow>
+#include <QSplitter>
 #include <QGridLayout>
 #include <QWidget>
 #include <QPushButton>
@@ -21,9 +23,8 @@ public:
     ~MainWindow();
 
 private:
-    QWidget* main_widget;
-    QGridLayout* main_layout;
-    QPushButton* dynamic_reconfigure;
+    QSplitter* splitter;
+    DynamicReconfigure* dynamic_reconfigure;
     QPushButton* monitor;
 
 
