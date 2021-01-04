@@ -48,9 +48,9 @@ void SoccerView::paintGL ()
     painter->translate(width() / 2, height() / 2); // bring the reference coordinate to the middle
     painter->scale(scale_ratio, -scale_ratio); // change the y axis direction (make it upward)
 
-    draw_ball();
     draw_field_lines();
     draw_robots();
+    draw_ball();
 
     delete painter;
 
@@ -58,31 +58,30 @@ void SoccerView::paintGL ()
 
 void SoccerView::draw_robots()
 {
+    QColor our_color = world_model->is_yellow ? yellow_team_color : blue_team_color;
+    QColor opp_color = world_model->is_yellow ? blue_team_color : yellow_team_color;
+
+    for (const auto& robot: world_model->our)
+        draw_robot(robot.pos, robot.dir, our_color);
+
+    for (const auto& robot: world_model->opp)
+        draw_robot(robot.pos, robot.dir, opp_color);
+}
+
+void SoccerView::draw_robot(const rcsc::Vector2D& pos, const rcsc::Vector2D& dir, const QColor& color)
+{
     double robot_radius = knowledge::ROBOT_RADIUS;
 
-    painter->setBrush(QBrush(world_model->is_yellow ? yellow_team_color : blue_team_color));
-    for (const auto& robot: world_model->our)
-    {
-        painter->setPen(QPen(world_model->is_yellow ? yellow_team_color : blue_team_color));
-        painter->drawEllipse((robot.pos.x-robot_radius)*100, (robot.pos.y-robot_radius)*100, 2*robot_radius*100, 2*robot_radius*100);
+    // draw robot body
+    painter->setPen(QPen(color));
+    painter->setBrush(QBrush(color));
+    painter->drawEllipse((pos.x-robot_radius)*100, (pos.y-robot_radius)*100, 2*robot_radius*100, 2*robot_radius*100);
 
-        painter->setPen(QPen(Qt::black, 2));
-        rcsc::Vector2D start{robot.pos};
-        rcsc::Vector2D end{ start + robot_radius*rcsc::Vector2D(robot.dir) };
-        painter->drawLine(start.x*100, start.y*100, end.x*100, end.y*100);
-    }
-
-    painter->setBrush(QBrush(world_model->is_yellow ? blue_team_color : yellow_team_color));
-    for (const auto& robot: world_model->opp)
-    {
-        painter->setPen(QPen(world_model->is_yellow ? blue_team_color : yellow_team_color));
-        painter->drawEllipse((robot.pos.x-robot_radius)*100, (robot.pos.y-robot_radius)*100, 2*robot_radius*100, 2*robot_radius*100);
-
-        painter->setPen(QPen(Qt::black, 2));
-        rcsc::Vector2D start{robot.pos};
-        rcsc::Vector2D end{ start + robot_radius*rcsc::Vector2D(robot.dir) };
-        painter->drawLine(start.x*100, start.y*100, end.x*100, end.y*100);
-    }
+    // draw robot direction
+    painter->setPen(QPen(Qt::black, 2));
+    rcsc::Vector2D start{pos};
+    rcsc::Vector2D end{ start + robot_radius*dir };
+    painter->drawLine(start.x*100, start.y*100, end.x*100, end.y*100);
 }
 
 void SoccerView::draw_ball()

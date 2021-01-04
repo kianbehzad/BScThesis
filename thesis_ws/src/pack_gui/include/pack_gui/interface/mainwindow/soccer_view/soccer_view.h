@@ -46,6 +46,7 @@ private:
     QColor blue_team_color, yellow_team_color;
     void draw_ball();
     void draw_field_lines();
+    void draw_robot(const rcsc::Vector2D& pos, const rcsc::Vector2D& dir, const QColor& color);
     void draw_robots();
 
     // ros2 stuff
