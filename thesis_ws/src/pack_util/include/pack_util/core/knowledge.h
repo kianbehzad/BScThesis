@@ -9,7 +9,7 @@ namespace knowledge
 {
     const double PI                     = 3.14159265359;
     const int MAX_ROBOT_NUM             = 12;
-    double BALL_RADIUS                  = 0.02135;
+    const double BALL_RADIUS            = 0.02135;
     // we work with old ones (not new)
     const double ROBOT_RADIUS           = 0.090;
     const double ROBOT_RADIUS_NEW       = 0.0890;
