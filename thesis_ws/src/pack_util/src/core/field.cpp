@@ -4,17 +4,6 @@
 #include <pack_util/core/field.h>
 
 CField::CField() {
-//    if(!ros::param::get("/field_width", _FIELD_WIDTH)) _FIELD_WIDTH = 9.0;
-//    ros::param::get("/field_height"          , _FIELD_HEIGHT);
-//    ros::param::get("/field_width"           , _FIELD_WIDTH);
-//    ros::param::get("/field_margin_height"   , _FIELD_MARGIN_HEIGHT);
-//    ros::param::get("/field_margin_width"    , _FIELD_MARGIN_WIDTH);
-//    ros::param::get("/field_penalty_point"   , _FIELD_PENALTY_POINT);
-//    ros::param::get("/goal_width"            , _GOAL_WIDTH);
-//    ros::param::get("/goal_depth"            , _GOAL_DEPTH);
-//    ros::param::get("/penalty_depth"         , _PENALTY_DEPTH);
-//    ros::param::get("/penalty_width"         , _PENALTY_WIDTH);
-//    ros::param::get("/center_circle_rad"     , _CENTER_CIRCLE_RAD);
 
     _FIELD_WIDTH             = 12.0;
     _FIELD_HEIGHT            = 9.00;
