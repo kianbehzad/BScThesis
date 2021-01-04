@@ -21,6 +21,10 @@ set(CMAKE_AUTOMOC ON)
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(pack_msgs REQUIRED)
+find_package(pack_util REQUIRED)
+find_package(GLUT REQUIRED)
+find_package(OpenGL REQUIRED)
 
 # find Qt5
 if(APPLE AND EXISTS /usr/local/opt/qt)
@@ -35,6 +39,7 @@ list(APPEND QT5_LIBRARIES Qt5::Core Qt5::Widgets Qt5::OpenGL Qt5::Network)
 # include paths
 include_directories(
         include
+        ${pack_util_INCLUDE_DIRS}
 )
 
 
@@ -48,9 +53,11 @@ add_executable(interface
         include/pack_gui/interface/mainwindow/dynamic_reconfigure/dynamic_reconfigure.h # for Qt MOC
         src/interface/mainwindow/dynamic_reconfigure/param_widget.cpp
         include/pack_gui/interface/mainwindow/dynamic_reconfigure/param_widget.h # for Qt MOC
+        src/interface/mainwindow/soccer_view/soccer_view.cpp
+        include/pack_gui/interface/mainwindow/soccer_view/soccer_view.h # for Qt MOC
         )
-ament_target_dependencies(interface rclcpp)
-target_link_libraries(interface ${QT5_LIBRARIES})
+ament_target_dependencies(interface rclcpp pack_msgs pack_util)
+target_link_libraries(interface ${QT5_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
 
 
 # install nodes

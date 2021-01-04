@@ -7,6 +7,7 @@
 
 #include "pack_gui/interface/extern_variables.h"
 #include "pack_gui/interface/mainwindow/dynamic_reconfigure/dynamic_reconfigure.h"
+#include "pack_gui/interface/mainwindow/soccer_view//soccer_view.h"
 #include <QMainWindow>
 #include <QSplitter>
 #include <QGridLayout>
@@ -25,9 +26,7 @@ public:
 private:
     QSplitter* splitter;
     DynamicReconfigure* dynamic_reconfigure;
-    QPushButton* monitor;
-
-
+    SoccerView* soccer_view;
 
 };
 
