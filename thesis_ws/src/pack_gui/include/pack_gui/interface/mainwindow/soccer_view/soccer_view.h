@@ -43,6 +43,7 @@ private:
     QPainter* painter;
     double scale_ratio;
     QList<rcsc::Vector2D> ball_trail;
+    QColor blue_team_color, yellow_team_color;
     void draw_ball();
     void draw_field_lines();
     void draw_robots();

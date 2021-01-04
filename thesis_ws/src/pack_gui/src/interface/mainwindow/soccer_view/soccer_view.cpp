@@ -9,6 +9,8 @@ SoccerView::SoccerView(QWidget *parent) : QOpenGLWidget(parent)
     // redraw
     connect(this, SIGNAL(postRedraw()), this, SLOT(redraw()));
     scale_ratio = 1;
+    blue_team_color.setNamedColor("cyan");
+    yellow_team_color.setNamedColor("yellow");
 
     // create dynamic-reconfigure node
     node = rclcpp::Node::make_shared("soccer_view_node");
@@ -56,13 +58,12 @@ void SoccerView::paintGL ()
 
 void SoccerView::draw_robots()
 {
-    // TODO set color of teams correctly
     double robot_radius = knowledge::ROBOT_RADIUS;
 
-    painter->setBrush(QBrush(Qt::cyan));
+    painter->setBrush(QBrush(world_model->is_yellow ? yellow_team_color : blue_team_color));
     for (const auto& robot: world_model->our)
     {
-        painter->setPen(QPen(Qt::cyan));
+        painter->setPen(QPen(world_model->is_yellow ? yellow_team_color : blue_team_color));
         painter->drawEllipse((robot.pos.x-robot_radius)*100, (robot.pos.y-robot_radius)*100, 2*robot_radius*100, 2*robot_radius*100);
 
         painter->setPen(QPen(Qt::black, 2));
@@ -71,10 +72,10 @@ void SoccerView::draw_robots()
         painter->drawLine(start.x*100, start.y*100, end.x*100, end.y*100);
     }
 
-    painter->setBrush(QBrush(Qt::yellow));
+    painter->setBrush(QBrush(world_model->is_yellow ? blue_team_color : yellow_team_color));
     for (const auto& robot: world_model->opp)
     {
-        painter->setPen(QPen(Qt::yellow));
+        painter->setPen(QPen(world_model->is_yellow ? blue_team_color : yellow_team_color));
         painter->drawEllipse((robot.pos.x-robot_radius)*100, (robot.pos.y-robot_radius)*100, 2*robot_radius*100, 2*robot_radius*100);
 
         painter->setPen(QPen(Qt::black, 2));
