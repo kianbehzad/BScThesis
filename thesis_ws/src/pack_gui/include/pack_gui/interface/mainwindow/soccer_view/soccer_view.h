@@ -6,6 +6,7 @@
 #include "pack_msgs/msg/world_model.hpp"
 #include "pack_msgs/msg/ssl_vision_geometry.hpp"
 #include "pack_util/geom/vector_2d.h"
+#include "pack_util/core/knowledge.h"
 
 #include <QOpenGLWidget>
 #include <QDebug>

@@ -57,7 +57,7 @@ void SoccerView::paintGL ()
 void SoccerView::draw_robots()
 {
     // TODO set color of teams correctly
-    double robot_radius = 0.09; // TODO put it in pack_util
+    double robot_radius = knowledge::ROBOT_RADIUS;
 
     painter->setBrush(QBrush(Qt::cyan));
     for (const auto& robot: world_model->our)
@@ -86,7 +86,7 @@ void SoccerView::draw_robots()
 
 void SoccerView::draw_ball()
 {
-    double ball_radius = 0.02135; // TODO put it in pack_util
+    double ball_radius = knowledge::BALL_RADIUS;
     painter->setPen(QPen(QColor("orangered")));
     painter->setBrush(QBrush(QColor("orangered")));
     painter->drawEllipse((world_model->ball.pos.x-ball_radius)*100, (world_model->ball.pos.y-ball_radius)*100, 2*ball_radius*100, 2*ball_radius*100);
