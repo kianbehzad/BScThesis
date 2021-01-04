@@ -9,18 +9,14 @@
 #include <fstream>
 
 
-const double Robot::robot_radius_old         = knowledge::robot_radius_old;
-//const double Robot::robot_radius_new       = knowledge::robot_radius_new;
-const double Robot::robot_radius_new         = knowledge::robot_radius_new;
-const double Robot::center_from_kicker_old   = knowledge::center_from_kicker_old;
-//const double Robot::center_from_kicker_new = knowledge::center_from_kicker_new;
-const double Robot::center_from_kicker_new   = knowledge::center_from_kicker_new;
-const double Robot::kicker_width_old         = knowledge::kicker_width_old;
-//const double Robot::kicker_width_new       = knowledge::kicker_width_new;
-const double Robot::kicker_width_new         = knowledge::kicker_width_new;
-const double Robot::wheel_rad_old            = knowledge::wheel_rad_old;
-//const double Robot::wheel_rad_new          = knowledge::wheel_rad_new;
-const double Robot::wheel_rad_new            = knowledge::wheel_rad_new;
+const double Robot::robot_radius_old         = knowledge::ROBOT_RADIUS;
+const double Robot::robot_radius_new         = knowledge::ROBOT_RADIUS_NEW;
+const double Robot::center_from_kicker_old   = knowledge::CENTER_FROM_KICKER;
+const double Robot::center_from_kicker_new   = knowledge::CENTER_FROM_KICKER_NEW;
+const double Robot::kicker_width_old         = knowledge::KICKER_WIDTH;
+const double Robot::kicker_width_new         = knowledge::KICKER_WIDTH_NEW;
+const double Robot::wheel_rad_old            = knowledge::WHEEL_RAD;
+const double Robot::wheel_rad_new            = knowledge::WHEEL_RAD_NEW;
 
 void Robot::setNewRobot(bool _new) {
     newRobot = _new;
