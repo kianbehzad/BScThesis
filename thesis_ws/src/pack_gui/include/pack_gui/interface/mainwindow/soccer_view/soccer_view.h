@@ -11,6 +11,7 @@
 #include <QDebug>
 #include <QPainter>
 #include <QPen>
+#include <QWheelEvent>
 
 #include <memory>
 
@@ -39,6 +40,7 @@ public:
 private:
     //draws
     QPainter* painter;
+    double scale_ratio;
     QList<rcsc::Vector2D> ball_trail;
     void draw_ball();
     void draw_field_lines();
@@ -58,6 +60,7 @@ private:
 protected:
     void paintGL () override;
     void initializeGL() override;
+    void wheelEvent ( QWheelEvent * event );
 
 private slots:
     void redraw();

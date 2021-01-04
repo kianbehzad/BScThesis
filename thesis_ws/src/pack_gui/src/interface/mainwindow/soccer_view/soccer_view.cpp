@@ -8,6 +8,7 @@ SoccerView::SoccerView(QWidget *parent) : QOpenGLWidget(parent)
 {
     // redraw
     connect(this, SIGNAL(postRedraw()), this, SLOT(redraw()));
+    scale_ratio = 1;
 
     // create dynamic-reconfigure node
     node = rclcpp::Node::make_shared("soccer_view_node");
@@ -43,7 +44,7 @@ void SoccerView::paintGL ()
 
     painter = new QPainter{this};
     painter->translate(width() / 2, height() / 2); // bring the reference coordinate to the middle
-    painter->scale(1, -1); // change the y axis direction (make it upward)
+    painter->scale(scale_ratio, -scale_ratio); // change the y axis direction (make it upward)
 
     draw_ball();
     draw_field_lines();
@@ -103,7 +104,7 @@ void SoccerView::draw_field_lines()
 {
     for(const auto & line : field_geometry->field.field_lines)
     {
-        painter->setPen(QPen(Qt::white, line.thickness*100));
+        painter->setPen(QPen(Qt::white, line.thickness*300)); // x300 is better for the sake of view (instead of x100)
         painter->drawLine(line.begin.x*100, line.begin.y*100, line.end.x*100, line.end.y*100);
     }
 }
@@ -111,6 +112,17 @@ void SoccerView::draw_field_lines()
 void SoccerView::redraw()
 {
     update();
+}
+
+void SoccerView::wheelEvent ( QWheelEvent * event )
+{
+    if (event->delta() < 0)
+        scale_ratio +=0.01;
+    else if (event->delta() > 0)
+        scale_ratio -=0.01;
+
+    if (scale_ratio <= 0)
+        scale_ratio = 0.01;
 }
 
 void SoccerView::worldmodel_callback (const pack_msgs::msg::WorldModel::SharedPtr msg)
