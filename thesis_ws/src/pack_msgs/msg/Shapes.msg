@@ -1,4 +1,4 @@
-string pulisher_name
+string publisher_name
 
 Vector2D[] points
 ShapeRect[] rects
