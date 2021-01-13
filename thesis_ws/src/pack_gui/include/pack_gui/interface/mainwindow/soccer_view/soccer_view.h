@@ -42,11 +42,12 @@ private:
     //draws
     QPainter* painter;
     double scale_ratio;
+    QList<QString> roman_numbers { "0", "I", "II", "III", "I/\\", "/\\", "/\\I", "/\\II", "/\\III", "IX", "X" };
     QList<rcsc::Vector2D> ball_trail;
     QColor blue_team_color, yellow_team_color;
     void draw_ball();
     void draw_field_lines();
-    void draw_robot(const rcsc::Vector2D& pos, const rcsc::Vector2D& dir, const QColor& color);
+    void draw_robot(const int& id, const rcsc::Vector2D& pos, const rcsc::Vector2D& dir, const QColor& color);
     void draw_robots();
 
     // ros2 stuff

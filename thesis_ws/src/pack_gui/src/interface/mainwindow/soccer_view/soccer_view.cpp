@@ -62,13 +62,13 @@ void SoccerView::draw_robots()
     QColor opp_color = world_model->is_yellow ? blue_team_color : yellow_team_color;
 
     for (const auto& robot: world_model->our)
-        draw_robot(robot.pos, robot.dir, our_color);
+        draw_robot(robot.id, robot.pos, robot.dir, our_color);
 
     for (const auto& robot: world_model->opp)
-        draw_robot(robot.pos, robot.dir, opp_color);
+        draw_robot(robot.id, robot.pos, robot.dir, opp_color);
 }
 
-void SoccerView::draw_robot(const rcsc::Vector2D& pos, const rcsc::Vector2D& dir, const QColor& color)
+void SoccerView::draw_robot(const int& id, const rcsc::Vector2D& pos, const rcsc::Vector2D& dir, const QColor& color)
 {
     double robot_radius = knowledge::ROBOT_RADIUS;
 
@@ -82,6 +82,9 @@ void SoccerView::draw_robot(const rcsc::Vector2D& pos, const rcsc::Vector2D& dir
     rcsc::Vector2D start{pos};
     rcsc::Vector2D end{ start + robot_radius*dir };
     painter->drawLine(start.x*100, start.y*100, end.x*100, end.y*100);
+
+    // draw robot ID
+    painter->drawText((pos.x-robot_radius)*100, (pos.y+2.5*robot_radius)*100, roman_numbers[id]);
 }
 
 void SoccerView::draw_ball()
