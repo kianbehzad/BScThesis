@@ -13,7 +13,24 @@ SoccerView::SoccerView(QWidget *parent) : QOpenGLWidget(parent)
     yellow_team_color.setNamedColor("yellow");
 
     // create dynamic-reconfigure node
-    node = rclcpp::Node::make_shared("soccer_view_node");
+    node = rclcpp::Node::make_shared("soccer_view_node", rclcpp::NodeOptions().automatically_declare_parameters_from_overrides(true));
+
+    // set up parameter client
+    auto parameters_client = std::make_shared<rclcpp::SyncParametersClient>(node);
+    while (!parameters_client->wait_for_service(1s)) {
+        if (!rclcpp::ok()) {
+            RCLCPP_ERROR(node->get_logger(), "Interrupted while waiting for the parameter service. Exiting.");
+            rclcpp::shutdown();
+        }
+        RCLCPP_INFO(node->get_logger(), "parameter service not available, waiting again...");
+    }
+
+    active_soccer_view = parameters_client->get_parameter("active_soccer_view", active_soccer_view);
+    draw_debugs = parameters_client->get_parameter("draw_debugs", draw_debugs);
+
+    // set up parameter-change callback
+    define_params_change_callback_lambda_function();
+    parameter_event_sub = parameters_client->on_parameter_event(params_change_callback);
 
     // worldmodel callback
     worldmodel_subscription = node->create_subscription<pack_msgs::msg::WorldModel>("/world_model", 10, std::bind(&SoccerView::worldmodel_callback, this, std::placeholders::_1));
@@ -130,6 +147,8 @@ void SoccerView::wheelEvent ( QWheelEvent * event )
 
 void SoccerView::worldmodel_callback (const pack_msgs::msg::WorldModel::SharedPtr msg)
 {
+    if(!active_soccer_view) return;
+
     world_model = msg;
     ball_trail.push_front(rcsc::Vector2D{world_model->ball.pos});
     if (ball_trail.length() > 7)
@@ -139,8 +158,34 @@ void SoccerView::worldmodel_callback (const pack_msgs::msg::WorldModel::SharedPt
 
 void SoccerView::geometry_callback (const pack_msgs::msg::SSLVisionGeometry::SharedPtr msg)
 {
+    if(!active_soccer_view) return;
+
     field_geometry = msg;
     postRedraw();
+}
+
+void SoccerView::define_params_change_callback_lambda_function()
+{
+    params_change_callback = [this](const rcl_interfaces::msg::ParameterEvent::SharedPtr event) -> void
+    {
+        for (auto & new_parameter : event->new_parameters) {
+            //do stuff
+        }
+        for (auto & changed_parameter : event->changed_parameters) {
+            if(changed_parameter.name == "active_soccer_view")
+            {
+                active_soccer_view = changed_parameter.value.bool_value;
+            }
+            else if(changed_parameter.name == "draw_debugs")
+            {
+                draw_debugs = changed_parameter.value.bool_value;
+            }
+        }
+        for (auto & deleted_parameter : event->deleted_parameters) {
+            //do stuff
+        }
+    };
+
 }
 
 

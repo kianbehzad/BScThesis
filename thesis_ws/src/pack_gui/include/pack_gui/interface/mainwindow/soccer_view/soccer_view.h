@@ -15,6 +15,9 @@
 #include <QWheelEvent>
 
 #include <memory>
+#include <chrono>
+
+using namespace std::chrono_literals;
 
 #ifndef PACK_GUI_SOCCER_VIEW_H
 #define PACK_GUI_SOCCER_VIEW_H
@@ -60,6 +63,12 @@ private:
 
     void geometry_callback (const pack_msgs::msg::SSLVisionGeometry::SharedPtr msg);
     rclcpp::Subscription<pack_msgs::msg::SSLVisionGeometry>::SharedPtr geometry_subscription;
+
+    bool active_soccer_view; //ros2 param
+    bool draw_debugs;        //ros2 param
+    std::function<void(const rcl_interfaces::msg::ParameterEvent::SharedPtr)> params_change_callback;
+    rclcpp::Subscription<rcl_interfaces::msg::ParameterEvent>::SharedPtr parameter_event_sub;
+    void define_params_change_callback_lambda_function();
 
 protected:
     void paintGL () override;
