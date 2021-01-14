@@ -1,3 +1,4 @@
+std_msgs/Header header
 string publisher_name
 
 Vector2D[] points
