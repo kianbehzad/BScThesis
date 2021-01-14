@@ -1,5 +1,10 @@
 # BSc Thesis - Formation Control of Multi-robot Systems
-Implementation and formation control of playmaker and supporter robots in small size soccer league in the context of the Internet of Things
+Implementation and formation control of playmaker and supporter robots in small size soccer league in the context of the Internet of Things.
+
+<p align="center">
+<img src="Resources/Images/main_interface.png" alt="main_interface"
+title="main_interface" width="600" align="middle" />
+</p>
 
 ## grSim
 The project is based on grSim simulator that was contributed to the SSL community. It performs a physical simulation of omni-directional robots and publishes envoironment network packages.
@@ -21,6 +26,10 @@ ROS2 supports different Linux distributions, any one of them is fine to work wit
 After installing ROS2, you need to install google protocol buffer. (if you installed grSim, it is already installed)
 ```bash
 sudo apt install libprotobuf-dev protobuf-compiler
+```
+And you need to install GLUT if you want to use the project's GUI.
+```bash
+sudo apt install freeglut3-dev
 ```
 Now we just need to install colcon to build our project.
 ```bash
@@ -82,14 +91,14 @@ title="new_VM3" width="400" align="middle" />
 #### Optional - Oracle VM VirtualBox
 - **Running ROS2 nodes on multiple machines**\
 if you intent to distribute your nodes on different hosts across your local network, you need to change your VM's network preferences.
-	- Shutdown your VM, select your VM from VirtualBox application, and click on settings on top of the window.
-	- Choose the **Network** tab from the top, and change the **NAT** setting to **Bridged Adapter**.
-	- Then choose one of your host's network interfaces from the second dropdown menu.
-	- Now your router will assign a seperate IP address to your VM, you can check it out by `ifconfig` command.
-		 ```bash
-		sudo apt install net-tools
-		ifconfig
-		```
+    - Shutdown your VM, select your VM from VirtualBox application, and click on settings on top of the window.
+    - Choose the **Network** tab from the top, and change the **NAT** setting to **Bridged Adapter**.
+    - Then choose one of your host's network interfaces from the second dropdown menu.
+    - Now your router will assign a seperate IP address to your VM, you can check it out by `ifconfig` command.
+         ```bash
+        sudo apt install net-tools
+        ifconfig
+        ```
 <p align="center">
 <img src="Resources/Images/optional_VM1.png" alt="optional_VM1"
 title="optional_VM1" width="400" align="middle" />
@@ -97,26 +106,26 @@ title="optional_VM1" width="400" align="middle" />
 
 - **Define a shared folder between host and VM** (adopted from [here](https://gist.github.com/estorgio/1d679f962e8209f8a9232f7593683265))\
 To define a shared folder between your host and VM, first you need to have it on your host and then mount it on the VM.
-	- Say we want to mount `/Users/<username>/ros2_foxy` from the host to `/home/<username>/ros2_foxy` on your VM.
-	- Shutdown your VM, select your VM from VirtualBox application, and click on settings on top of the window.
-	- Choose the **Shared Folders** tab from the top, and click on the **Add new shared folder** icon. (picture at the end of the section)
-	- Choose the folder on your host, and put it's name in the second field and leave everything else unchecked. (picture at the end of the section)
-	- Run your VM, and run the commands bellow.
-		```
-		sudo apt-get update
-		sudo apt-get install build-essential linux-headers-`uname -r`
-		```
-	- from the top of your VM, go to **Devices** menu -> **Insert Guest Additions CD image menu**, and let the process finishes.
-	- reboot your VM.
-		```
-		sudo shutdown -r now
-		```
-	- Edit the `/etc/fstab` file and add the following line at the end. you can use `id -u` command to get your username ID(uid) - this option is needed to change the ownership of the mounted folder too your user (default is for root user)
-		 ```bash
-		<the name in the above field>	/home/<username>/ros2_foxy	vboxsf	uid=1000	0	0
-		```
-	- Edit the `/etc/modules` file and add the `vboxsf` at the end of it.
-	- Now reboot your VM again and the folder should be mounted in your home directory.
+    - Say we want to mount `/Users/<username>/ros2_foxy` from the host to `/home/<username>/ros2_foxy` on your VM.
+    - Shutdown your VM, select your VM from VirtualBox application, and click on settings on top of the window.
+    - Choose the **Shared Folders** tab from the top, and click on the **Add new shared folder** icon. (picture at the end of the section)
+    - Choose the folder on your host, and put it's name in the second field and leave everything else unchecked. (picture at the end of the section)
+    - Run your VM, and run the commands bellow.
+        ```
+        sudo apt-get update
+        sudo apt-get install build-essential linux-headers-`uname -r`
+        ```
+    - from the top of your VM, go to **Devices** menu -> **Insert Guest Additions CD image menu**, and let the process finishes.
+    - reboot your VM.
+        ```
+        sudo shutdown -r now
+        ```
+    - Edit the `/etc/fstab` file and add the following line at the end. you can use `id -u` command to get your username ID(uid) - this option is needed to change the ownership of the mounted folder too your user (default is for root user)
+         ```bash
+        <the name in the above field>    /home/<username>/ros2_foxy    vboxsf    uid=1000    0    0
+        ```
+    - Edit the `/etc/modules` file and add the `vboxsf` at the end of it.
+    - Now reboot your VM again and the folder should be mounted in your home directory.
 <p align="center">
 <img src="Resources/Images/optional_VM2.png" alt="optional_VM2"
 title="optional_VM2" width="400" align="middle" />
@@ -124,22 +133,24 @@ title="optional_VM2" width="400" align="middle" />
 
 - **Use CLion to remotely program on your VM**\
 You can configure host's CLion in a way to use your VM's toolchain, to be able to program and run your software remotely from your host machine.
-	- First you need to setup SSH on your VM. (adopted from [here](https://dev.to/shafikshaon/ubuntu-server-setup-on-virtual-box-and-connect-with-ssh-56k0)) 
-		- install the following packages.
-			```
-			sudo apt update
-			sudo apt install openssh-server
-			sudo apt install ssh
-			```
-		- Verify SSH is running. (you should see `Active: active (running)` in the output)
-			```
-			sudo systemctl status ssh
-			```
-		- Disable the firewall
-			```
-			sudo ufw disable
-			```
-		- now you can SSH to your VM with it's username and IP (`ifconfig`)
+    - First you need to setup SSH on your VM. (adopted from [here](https://dev.to/shafikshaon/ubuntu-server-setup-on-virtual-box-and-connect-with-ssh-56k0)) 
+        - install the following packages.
+            ```
+            sudo apt update
+            sudo apt install openssh-server
+            sudo apt install ssh
+            ```
+        - Verify SSH is running. (you should see `Active: active (running)` in the output)
+            ```
+            sudo systemctl status ssh
+            ```
+        - Disable the firewall
+            ```
+            sudo ufw disable
+            ```
+        - now you can SSH to your VM with it's username and IP (`ifconfig`)
 
-	- Second, follow the instruction from the [CLion webpage](https://www.jetbrains.com/help/clion/remote-projects-support.html#remote-toolchain) to set the toolchain of your IDE from VM and do your work from your host.
-	- **important note** if you want to edit a ROS2 package in your remote IDE (which probably you are) you should define all the necessary `environment variables` in CLion settings. But an easier solution is to  create `~/.zshenv` file in VM's home directory and source both ROS2's and workspace's `setup.zsh` in this file instead of in `~/.zshrc`. It is not the correct place to source our setup files but the `~/.zshenv` file automatically runs with every login (including SSH from CLion) so the needed `environment variables` will be defined for CLion automatically.
+    - Second, follow the instruction from the [CLion webpage](https://www.jetbrains.com/help/clion/remote-projects-support.html#remote-toolchain) to set the toolchain of your IDE from VM and do your work from your host.
+    - In some cases CLion's editor (not the remote toolchain) may not find some of libraries and header files (especially custom made libraries) in this case you only need to resync the IDE with the remote host manually by choosing the following from the CLion's menu bar **Tools | Resync with Remote Hosts**.
+
+    - **important note** if you want to edit a ROS2 package in your remote IDE (which probably you are) you should define all the necessary `environment variables` in CLion settings. But an easier solution is to  create `~/.zshenv` file in VM's home directory and source both ROS2's and workspace's `setup.zsh` in this file instead of in `~/.zshrc`. It is not the correct place to source our setup files but the `~/.zshenv` file automatically runs with every login (including SSH from CLion) so the needed `environment variables` will be defined for CLion automatically.

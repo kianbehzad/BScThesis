@@ -7,22 +7,18 @@
 
 namespace knowledge
 {
-    const double PI = 3.14159265359;
-
-    const int MAX_ROBOT_NUM = 12;
-
-    const double robot_radius_old = 0.090;
-    //const double robot_radius_new = 0.080;
-    const double robot_radius_new = 0.0890;
-    const double center_from_kicker_old = 0.075;
-    //const double center_from_kicker_new = 0.070;
-    const double center_from_kicker_new = 0.06;
-    const double kicker_width_old = 0.074;
-    //const double kicker_width_new = 0.080;
-    const double kicker_width_new = 0.082;
-    const double wheel_rad_old = 0.035;
-    //const double wheel_rad_new = 0.03;
-    const double wheel_rad_new = 0.027;
+    const double PI                     = 3.14159265359;
+    const int MAX_ROBOT_NUM             = 12;
+    const double BALL_RADIUS            = 0.02135;
+    // we work with old ones (not new)
+    const double ROBOT_RADIUS           = 0.090;
+    const double ROBOT_RADIUS_NEW       = 0.0890;
+    const double CENTER_FROM_KICKER     = 0.075;
+    const double CENTER_FROM_KICKER_NEW = 0.06;
+    const double KICKER_WIDTH           = 0.074;
+    const double KICKER_WIDTH_NEW       = 0.082;
+    const double WHEEL_RAD              = 0.035;
+    const double WHEEL_RAD_NEW          = 0.027;
 
 }
 
