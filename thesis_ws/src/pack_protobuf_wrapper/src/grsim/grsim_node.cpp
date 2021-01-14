@@ -56,9 +56,9 @@ void GrsimNode::command_callback(const pack_msgs::msg::RobotCommand::SharedPtr m
     grsim_robot_command->set_id(msg->robot_id);
     grsim_robot_command->set_kickspeedx(msg->kick_speed / 100.0);
     grsim_robot_command->set_kickspeedz(msg->kick_speedz / 200.0);
-    grsim_robot_command->set_veltangent(0);
-    grsim_robot_command->set_velnormal(0);
-    grsim_robot_command->set_velangular(0);
+    grsim_robot_command->set_veltangent(msg->vel_f);
+    grsim_robot_command->set_velnormal(msg->vel_n);
+    grsim_robot_command->set_velangular(msg->vel_w);
     grsim_robot_command->set_wheel1(msg->wheel1);
     grsim_robot_command->set_wheel2(msg->wheel2);
     grsim_robot_command->set_wheel3(msg->wheel3);
