@@ -157,6 +157,16 @@ void SoccerView::draw_debug_draws()
             painter->drawRect(CVTX(rect.x), CVTY(rect.y), CVTM(rect.width), CVTM(rect.height));
         }
 
+        for(const auto& circle : value->circles)
+        {
+            QColor color {QString::fromStdString(circle.color)};
+            painter->setPen(QPen(color, 2));
+            if(circle.fill) painter->setBrush(QBrush(color));
+            else painter->setBrush(Qt::NoBrush);
+
+            painter->drawEllipse(CVTX(circle.x), CVTY(circle.y), CVTM(circle.width), CVTM(circle.height));
+        }
+
         for(const auto& triangle : value->triangles)
         {
             QColor color {QString::fromStdString(triangle.color)};
