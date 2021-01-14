@@ -46,7 +46,6 @@ include_directories(
 # interface node
 add_executable(interface
         src/interface/interface_exec.cpp
-#        src/interface/interface_node.cpp
         src/interface/mainwindow/mainwindow.cpp
         include/pack_gui/interface/mainwindow/mainwindow.h # for Qt MOC
         src/interface/mainwindow/dynamic_reconfigure/dynamic_reconfigure.cpp
