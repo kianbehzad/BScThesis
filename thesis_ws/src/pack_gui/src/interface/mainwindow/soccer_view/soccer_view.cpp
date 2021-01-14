@@ -141,6 +141,8 @@ void SoccerView::draw_debug_draws()
     painter->setBrush(Qt::NoBrush);
     for(const auto& value : debug_draws)
     {
+        if (node->now().seconds() - value->header.stamp.sec > 2) continue; // skip messages from long time ago
+
         for(const auto& point : value->points)
         {
             painter->setPen(QPen(Qt::black, 10));
@@ -232,6 +234,8 @@ void SoccerView::debug_draw_callback (const pack_msgs::msg::Shapes::SharedPtr ms
     if(!active_soccer_view) return;
     // storing draws on seperate key-values for each publisher to avoid glimpses
     debug_draws[QString::fromStdString(msg->publisher_name)] = msg;
+    // store received time
+    debug_draws[QString::fromStdString(msg->publisher_name)]->header.stamp = node->now();
 }
 
 void SoccerView::define_params_change_callback_lambda_function()
