@@ -11,6 +11,7 @@ worldmodel_node:
     is_simulation: True
     is_our_side_left: True
     is_our_color_yellow: False
+    is_plotWM_on: False
     cam_num: 1
     camera_0: True
     camera_1: False

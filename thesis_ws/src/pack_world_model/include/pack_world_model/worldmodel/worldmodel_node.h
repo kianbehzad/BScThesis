@@ -14,6 +14,7 @@
 #include "pack_msgs/msg/ssl_vision_geometry.hpp"
 #include "pack_msgs/msg/robot_command.hpp"
 #include "pack_msgs/msg/world_model.hpp"
+#include "pack_msgs/msg/plot_world_model.hpp"
 
 #include "pack_world_model/worldmodel/util/config.h"
 #include "pack_world_model/worldmodel/wm/worldmodel.h"
@@ -37,6 +38,7 @@ private:
     std::function<void(const rcl_interfaces::msg::ParameterEvent::SharedPtr)> params_change_callback;
     rclcpp::Subscription<rcl_interfaces::msg::ParameterEvent>::SharedPtr parameter_event_sub;
     void define_params_change_callback_lambda_function();
+    bool is_plotWM_on;
 
     void vision_detection_callback(const pack_msgs::msg::SSLVisionDetection::SharedPtr msg);
     rclcpp::Subscription<pack_msgs::msg::SSLVisionDetection>::SharedPtr vision_detection_subscription;
@@ -48,9 +50,12 @@ private:
     rclcpp::Subscription<pack_msgs::msg::RobotCommand>::SharedPtr command_subscription[knowledge::MAX_ROBOT_NUM];
 
     rclcpp::Publisher<pack_msgs::msg::WorldModel>::SharedPtr worldmodel_publisher;
+    rclcpp::Publisher<pack_msgs::msg::PlotWorldModel>::SharedPtr plot_worldmodel_publisher;
 
     std::shared_ptr<WorldModel> wm;
     int frame, packs;
+
+    void publish_plotWM(const pack_msgs::msg::WorldModel::SharedPtr wm);
 };
 
 
