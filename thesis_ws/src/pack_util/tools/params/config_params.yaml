@@ -24,3 +24,12 @@ soccer_view_node:
   ros__parameters:
     active_soccer_view: False
     draw_debugs: False
+agent_node:
+  ros__parameters:
+    P_vel: 10.0
+    I_vel: 10.0
+    D_vel: 10.0
+    P_pos: 10.0
+    I_pos: 10.0
+    D_pos: 10.0
+    max_vel: 4.0

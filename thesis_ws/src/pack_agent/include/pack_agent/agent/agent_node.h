@@ -24,6 +24,22 @@ public:
     AgentNode(const rclcpp::NodeOptions & options);
 
 private:
+    // parameter client
+    std::function<void(const rcl_interfaces::msg::ParameterEvent::SharedPtr)> params_change_callback;
+    rclcpp::Subscription<rcl_interfaces::msg::ParameterEvent>::SharedPtr parameter_event_sub;
+    void define_params_change_callback_lambda_function();
+    // prameter variables
+    double P_vel = 10;
+    double I_vel = 10;
+    double D_vel = 10;
+    double P_pos = 10;
+    double I_pos = 10;
+    double D_pos = 10;
+    double max_vel = 4;
+
+    // world model subscription
+    void worldmodel_callback(const pack_msgs::msg::WorldModel::SharedPtr msg);
+    rclcpp::Subscription<pack_msgs::msg::WorldModel>::SharedPtr worldmodel_subscription;
 };
 
 #endif //PACK_AGENT_AGENT_NODE_H
