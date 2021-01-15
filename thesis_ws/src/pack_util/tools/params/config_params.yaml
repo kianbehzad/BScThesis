@@ -22,5 +22,5 @@ worldmodel_node:
     camera_7: False
 soccer_view_node:
   ros__parameters:
-    active_soccer_view: True
-    draw_debugs: True
+    active_soccer_view: False
+    draw_debugs: False
