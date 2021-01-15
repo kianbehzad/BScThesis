@@ -1,7 +1,7 @@
 grsim_node:
   ros__parameters:
     grsim_command_listen_port: 50051
-    grsim_ip: "192.168.1.50"
+    grsim_ip: "192.168.1.51"
 vision_node:
   ros__parameters:
     vision_multicast_port: 50055
