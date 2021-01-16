@@ -10,6 +10,7 @@
 #include <string>
 #include <functional>
 
+#include "pack_agent/agent/extern_variables.h"
 #include "pack_msgs/msg/robot_command.hpp"
 #include "pack_msgs/msg/world_model.hpp"
 #include "pack_msgs/msg/skill.hpp"

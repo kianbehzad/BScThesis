@@ -4,6 +4,9 @@
 
 #include "pack_agent/agent/agent_node.h"
 
+// extern value definitions
+pack_msgs::msg::WorldModel::SharedPtr extern_wm;
+
 AgentNode::AgentNode(const rclcpp::NodeOptions & options) : Node("agent_node", options)
 {
     // set up parameter client
@@ -41,7 +44,7 @@ AgentNode::AgentNode(const rclcpp::NodeOptions & options) : Node("agent_node", o
 
 void AgentNode::worldmodel_callback(const pack_msgs::msg::WorldModel::SharedPtr msg)
 {
-    
+    extern_wm = msg;
 }
 
 void AgentNode::skill_callback(const pack_msgs::msg::Skill::SharedPtr msg)
