@@ -13,6 +13,7 @@
 #include <QDebug>
 
 #include "pack_agent/agent/extern_variables.h"
+#include "pack_util/core/drawer.h"
 #include "pack_msgs/msg/robot_command.hpp"
 #include "pack_msgs/msg/world_model.hpp"
 #include "pack_msgs/msg/skill.hpp"
@@ -28,6 +29,7 @@ class AgentNode : public rclcpp::Node
 {
 public:
     AgentNode(const rclcpp::NodeOptions & options);
+    ~AgentNode();
 
 private:
     // parameter client
@@ -46,6 +48,9 @@ private:
 
     // robot command publisher
     rclcpp::Publisher<pack_msgs::msg::RobotCommand>::SharedPtr robotcommand_publisher;
+
+    // debug draws publisher
+    rclcpp::Publisher<pack_msgs::msg::Shapes>::SharedPtr debugdraws_publisher;
 
 };
 

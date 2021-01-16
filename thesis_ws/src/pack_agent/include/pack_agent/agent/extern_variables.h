@@ -6,8 +6,10 @@
 #define PACK_AGENT_EXTERN_VARIABLES_H
 
 #include "pack_msgs/msg/world_model.hpp"
+#include "pack_util/core/drawer.h"
 
 extern pack_msgs::msg::WorldModel::SharedPtr extern_wm;
+extern Drawer* extern_drawer;
 extern double extern_P_pos;
 extern double extern_I_pos;
 extern double extern_D_pos;

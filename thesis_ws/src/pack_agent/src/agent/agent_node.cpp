@@ -6,6 +6,7 @@
 
 // extern value definitions
 pack_msgs::msg::WorldModel::SharedPtr extern_wm;
+Drawer* extern_drawer;
 double extern_P_pos = 1;
 double extern_I_pos = 0;
 double extern_D_pos = 0;
@@ -47,12 +48,29 @@ AgentNode::AgentNode(const rclcpp::NodeOptions & options) : Node("agent_node", o
 
     // set up robot command publisher
     robotcommand_publisher = this->create_publisher<pack_msgs::msg::RobotCommand>("~/command", 5);
-    qDebug() << this->get_name();
+
+    // set up debug draws publisher
+    extern_drawer = new Drawer{this->get_name()};
+    debugdraws_publisher = this->create_publisher<pack_msgs::msg::Shapes>("/debug_draws", 5);
+
+}
+
+AgentNode::~AgentNode()
+{
+   delete extern_drawer; extern_drawer = nullptr;
 }
 
 void AgentNode::worldmodel_callback(const pack_msgs::msg::WorldModel::SharedPtr msg)
 {
     extern_wm = msg;
+    extern_drawer->choose_pen("red", false);
+    extern_drawer->draw_circle(0, 0, 0.5);
+    extern_drawer->choose_pen("blue", true);
+    extern_drawer->draw_line(0, 0, 1, 1);
+    extern_drawer->choose_pen("orange", true);
+    extern_drawer->draw_rect(-4.5, 0, 2, 1);
+
+    debugdraws_publisher->publish(extern_drawer->get_draws());
 }
 
 void AgentNode::skill_callback(const pack_msgs::msg::Skill::SharedPtr msg)
