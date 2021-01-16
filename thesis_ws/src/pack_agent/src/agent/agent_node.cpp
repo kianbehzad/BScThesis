@@ -43,11 +43,11 @@ AgentNode::AgentNode(const rclcpp::NodeOptions & options) : Node("agent_node", o
     worldmodel_subscription = this->create_subscription<pack_msgs::msg::WorldModel>("/world_model", 10, std::bind(&AgentNode::worldmodel_callback, this, _1));
 
     // set up skill callback
-    skill_subscription = this->create_subscription<pack_msgs::msg::Skill>("/skill", 10, std::bind(&AgentNode::skill_callback, this, _1));
+    skill_subscription = this->create_subscription<pack_msgs::msg::Skill>("~/skill", 10, std::bind(&AgentNode::skill_callback, this, _1));
 
     // set up robot command publisher
-    robotcommand_publisher = this->create_publisher<pack_msgs::msg::RobotCommand>("/agent_0/command", 5);
-
+    robotcommand_publisher = this->create_publisher<pack_msgs::msg::RobotCommand>("~/command", 5);
+    qDebug() << this->get_name();
 }
 
 void AgentNode::worldmodel_callback(const pack_msgs::msg::WorldModel::SharedPtr msg)
