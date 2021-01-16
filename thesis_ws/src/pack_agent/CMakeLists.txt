@@ -43,6 +43,8 @@ add_executable(agent
         src/agent/agent_exec.cpp
         src/agent/agent_node.cpp
         src/agent/skill/pid.cpp
+        src/agent/skill/skill.cpp
+        src/agent/skill/skill_gotopoint.cpp
         )
 ament_target_dependencies(agent rclcpp pack_msgs pack_util)
 target_link_libraries(agent ${QT5_LIBRARIES})
