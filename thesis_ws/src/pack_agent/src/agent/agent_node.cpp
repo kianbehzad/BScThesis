@@ -38,7 +38,8 @@ AgentNode::AgentNode(const rclcpp::NodeOptions & options) : Node("agent_node", o
     // set up skill callback
     skill_subscription = this->create_subscription<pack_msgs::msg::Skill>("/skill", 10, std::bind(&AgentNode::skill_callback, this, _1));
 
-
+    // set up robot command publisher
+    robotcommand_publisher = this->create_publisher<pack_msgs::msg::RobotCommand>("/agent_0/command", 5);
 
 }
 

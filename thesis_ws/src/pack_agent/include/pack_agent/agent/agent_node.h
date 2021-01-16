@@ -15,6 +15,7 @@
 #include "pack_msgs/msg/world_model.hpp"
 #include "pack_msgs/msg/skill.hpp"
 #include "pack_msgs/msg/skill_goto_point.hpp"
+#include "pack_msgs/msg/robot_command.hpp"
 
 #include "rclcpp/rclcpp.hpp"
 
@@ -48,6 +49,10 @@ private:
     void skill_callback(const pack_msgs::msg::Skill::SharedPtr msg);
     rclcpp::Subscription<pack_msgs::msg::Skill>::SharedPtr skill_subscription;
     pack_msgs::msg::Skill::SharedPtr skill;
+
+    // robot command publisher
+    rclcpp::Publisher<pack_msgs::msg::RobotCommand>::SharedPtr robotcommand_publisher;
+
 };
 
 #endif //PACK_AGENT_AGENT_NODE_H
