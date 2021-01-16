@@ -13,6 +13,8 @@
 #include <QDebug>
 
 #include "pack_agent/agent/extern_variables.h"
+#include "pack_agent/agent/skill/skill.h"
+#include "pack_agent/agent/skill/skill_gotopoint.h"
 #include "pack_util/core/drawer.h"
 #include "pack_msgs/msg/robot_command.hpp"
 #include "pack_msgs/msg/world_model.hpp"
@@ -44,13 +46,17 @@ private:
     // skill subscription
     void skill_callback(const pack_msgs::msg::Skill::SharedPtr msg);
     rclcpp::Subscription<pack_msgs::msg::Skill>::SharedPtr skill_subscription;
-    pack_msgs::msg::Skill::SharedPtr skill;
+    pack_msgs::msg::Skill::SharedPtr skill_msg;
 
     // robot command publisher
     rclcpp::Publisher<pack_msgs::msg::RobotCommand>::SharedPtr robotcommand_publisher;
 
     // debug draws publisher
     rclcpp::Publisher<pack_msgs::msg::Shapes>::SharedPtr debugdraws_publisher;
+
+    // Skills
+    Skill* skill;
+    SkillGotoPoint* skill_gotopoint;
 
 };
 

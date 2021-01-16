@@ -40,6 +40,9 @@ AgentNode::AgentNode(const rclcpp::NodeOptions & options) : Node("agent_node", o
     extern_D_pos = parameters_client->get_parameter("D_pos", extern_D_pos);
     extern_max_vel = parameters_client->get_parameter("max_vel", extern_max_vel);
 
+    // setup skills
+    skill_gotopoint = new SkillGotoPoint{};
+
     // set up world_model callback
     worldmodel_subscription = this->create_subscription<pack_msgs::msg::WorldModel>("/world_model", 10, std::bind(&AgentNode::worldmodel_callback, this, _1));
 
@@ -63,19 +66,29 @@ AgentNode::~AgentNode()
 void AgentNode::worldmodel_callback(const pack_msgs::msg::WorldModel::SharedPtr msg)
 {
     extern_wm = msg;
-    extern_drawer->choose_pen("red", false);
-    extern_drawer->draw_circle(0, 0, 0.5);
-    extern_drawer->choose_pen("blue", true);
-    extern_drawer->draw_line(0, 0, 1, 1);
-    extern_drawer->choose_pen("orange", true);
-    extern_drawer->draw_rect(-4.5, 0, 2, 1);
+
+    if(skill_msg != nullptr)
+    {
+        switch (skill_msg->skill_type) {
+            case pack_msgs::msg::Skill::SKILLGOTOPOINT:
+                skill = skill_gotopoint;
+            break;
+            case pack_msgs::msg::Skill::SKILLGOTOPOINTAVOID:
+                // TODO need implementation of the skill
+            break;
+            case pack_msgs::msg::Skill::NONE:
+                // TODO need implementation of the skill
+            break;
+        }
+        robotcommand_publisher->publish(skill->execute(*skill_msg));
+    }
 
     debugdraws_publisher->publish(extern_drawer->get_draws());
 }
 
 void AgentNode::skill_callback(const pack_msgs::msg::Skill::SharedPtr msg)
 {
-    skill = msg;
+    skill_msg = msg;
 }
 
 void AgentNode::define_params_change_callback_lambda_function()
