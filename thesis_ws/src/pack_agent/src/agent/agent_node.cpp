@@ -42,6 +42,7 @@ AgentNode::AgentNode(const rclcpp::NodeOptions & options) : Node("agent_node", o
 
     // setup skills
     skill_gotopoint = new SkillGotoPoint{};
+    skill_none = new SkillNone{};
 
     // set up world_model callback
     worldmodel_subscription = this->create_subscription<pack_msgs::msg::WorldModel>("/world_model", 10, std::bind(&AgentNode::worldmodel_callback, this, _1));
@@ -61,6 +62,8 @@ AgentNode::AgentNode(const rclcpp::NodeOptions & options) : Node("agent_node", o
 AgentNode::~AgentNode()
 {
    delete extern_drawer; extern_drawer = nullptr;
+   delete skill_gotopoint; skill_gotopoint = nullptr;
+   delete skill_none; skill_none = nullptr;
 }
 
 void AgentNode::worldmodel_callback(const pack_msgs::msg::WorldModel::SharedPtr msg)
@@ -77,7 +80,7 @@ void AgentNode::worldmodel_callback(const pack_msgs::msg::WorldModel::SharedPtr 
                 // TODO need implementation of the skill
             break;
             case pack_msgs::msg::Skill::NONE:
-                // TODO need implementation of the skill
+                skill = skill_none;
             break;
         }
         robotcommand_publisher->publish(skill->execute(*skill_msg));
