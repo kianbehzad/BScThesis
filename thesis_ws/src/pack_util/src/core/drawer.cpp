@@ -73,6 +73,15 @@ void Drawer::draw_rect(const double& left_top_x, const double& left_top_y, const
     shapes->rects.push_back(tmp);
 }
 
+void Drawer::draw_rect(const rcsc::Vector2D& left_top, const double& width, const double& height)
+{
+    pack_msgs::msg::ShapeRect tmp;
+    tmp.x = left_top.x; tmp.y = left_top.x;
+    tmp.width = width;  tmp.height = height;
+    tmp.fill = fill_the_shape;  tmp.color = color;
+    shapes->rects.push_back(tmp);
+}
+
 void Drawer::draw_rect(const pack_msgs::msg::ShapeRect& rect)
 {
     pack_msgs::msg::ShapeRect tmp = rect;
@@ -88,6 +97,15 @@ void Drawer::draw_circle(const double& center_x, const double& center_y, const d
     shapes->circles.push_back(tmp);
 }
 
+void Drawer::draw_circle(const rcsc::Vector2D& center, const double& r)
+{
+    pack_msgs::msg::ShapeRect tmp;
+    tmp.x = center.x-r; tmp.y = center.y+r;
+    tmp.width = 2*r;    tmp.height = 2*r;
+    tmp.fill = fill_the_shape;  tmp.color = color;
+    shapes->circles.push_back(tmp);
+}
+
 void Drawer::draw_ellipse(const double& left_top_x, const double& left_top_y, const double& width, const double& height)
 {
     pack_msgs::msg::ShapeRect tmp;
@@ -96,6 +114,16 @@ void Drawer::draw_ellipse(const double& left_top_x, const double& left_top_y, co
     tmp.fill = fill_the_shape;  tmp.color = color;
     shapes->circles.push_back(tmp);
 }
+
+void Drawer::draw_ellipse(const rcsc::Vector2D& left_top, const double& width, const double& height)
+{
+    pack_msgs::msg::ShapeRect tmp;
+    tmp.x = left_top.x; tmp.y = left_top.y;
+    tmp.width = width;  tmp.height = height;
+    tmp.fill = fill_the_shape;  tmp.color = color;
+    shapes->circles.push_back(tmp);
+}
+
 void Drawer::draw_ellipse(const pack_msgs::msg::ShapeRect& rect)
 {
     pack_msgs::msg::ShapeRect tmp = rect;
@@ -108,6 +136,16 @@ void Drawer::draw_triangle(const double& x1, const double& y1, const double& x2,
     tmp.x1 = x1;    tmp.y1 = y1;
     tmp.x2 = x2;    tmp.y1 = y2;
     tmp.x3 = x3;    tmp.y1 = y3;
+    tmp.fill = fill_the_shape;  tmp.color = color;
+    shapes->triangles.push_back(tmp);
+}
+
+void Drawer::draw_triangle(const rcsc::Vector2D& p1, const rcsc::Vector2D& p2, const rcsc::Vector2D& p3)
+{
+    pack_msgs::msg::ShapeTriangle tmp;
+    tmp.x1 = p1.x;    tmp.y1 = p1.y;
+    tmp.x2 = p2.x;    tmp.y1 = p2.y;
+    tmp.x3 = p3.x;    tmp.y1 = p3.y;
     tmp.fill = fill_the_shape;  tmp.color = color;
     shapes->triangles.push_back(tmp);
 }
@@ -126,6 +164,16 @@ void Drawer::draw_line(const double& x1, const double& y1, const double& x2, con
     tmp.color = color;
     shapes->lines.push_back(tmp);
 }
+
+void Drawer::draw_line(const rcsc::Vector2D& p1, const rcsc::Vector2D& p2)
+{
+    pack_msgs::msg::ShapeLine tmp;
+    tmp.x1 = p1.x;    tmp.y1 = p1.y;
+    tmp.x2 = p2.x;    tmp.y2 = p2.y;
+    tmp.color = color;
+    shapes->lines.push_back(tmp);
+}
+
 void Drawer::draw_line(const pack_msgs::msg::ShapeLine& line)
 {
     pack_msgs::msg::ShapeLine tmp = line;

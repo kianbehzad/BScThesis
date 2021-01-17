@@ -47,7 +47,7 @@ pack_msgs::msg::RobotCommand SkillGotoPoint::execute(const pack_msgs::msg::Skill
     double veln = (dir.y-velf*robot_dir.y)/(robot_norm_dir.y);
 
     extern_drawer->choose_pen("darkgray", false);
-    extern_drawer->draw_line(robot.pos.x, robot.pos.y, skill_gotopoint_msg.destination.x, skill_gotopoint_msg.destination.y);
+    extern_drawer->draw_line(robot.pos, rcsc::Vector2D(skill_gotopoint_msg.destination));
 
     // fill the robot command message
     robot_command.vel_f = velf;
