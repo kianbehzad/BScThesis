@@ -27,8 +27,8 @@ soccer_view_node:
     draw_debugs: False
 agent_param_node:
   ros__parameters:
-    P_pos: 1.0
-    I_pos: 0.0
+    P_pos: 2.6
+    I_pos: 0.0001
     D_pos: 0.0
     P_angle: 1.0
     I_angle: 0.0

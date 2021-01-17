@@ -9,7 +9,7 @@ PID::PID(const double& _max_integral_term, const double& _max_derivative_term, c
 {
     p = i = d = 0;
     last_error = 0;
-    integral_values = std::vector<double>(100, 0);
+    integral_values = std::vector<double>(10, 0);
 }
 
 double PID::execute(const double& error)
