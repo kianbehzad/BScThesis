@@ -38,13 +38,16 @@ pack_msgs::msg::RobotCommand SkillGotoPoint::execute(const pack_msgs::msg::Skill
 
     double error = rcsc::Vector2D(skill_gotopoint_msg.destination).dist(rcsc::Vector2D(robot.pos));
     double output = pos_pid->execute(error);
-    rcsc::Vector2D dir = (rcsc::Vector2D(skill_gotopoint_msg.destination) - rcsc::Vector2D(robot.pos)).norm();
+    rcsc::Vector2D dir = output*(rcsc::Vector2D(skill_gotopoint_msg.destination) - rcsc::Vector2D(robot.pos)).norm();
 
     rcsc::Vector2D robot_dir = rcsc::Vector2D{robot.dir}.norm();
     rcsc::Vector2D robot_norm_dir = robot_dir.rotatedVector(90);
 
     double velf = (dir.x*robot_norm_dir.y - dir.y*robot_norm_dir.x) / (robot_dir.x*robot_norm_dir.y - robot_dir.y*robot_norm_dir.x);
     double veln = (dir.y-velf*robot_dir.y)/(robot_norm_dir.y);
+
+    extern_drawer->choose_pen("darkgray", false);
+    extern_drawer->draw_line(robot.pos.x, robot.pos.y, skill_gotopoint_msg.destination.x, skill_gotopoint_msg.destination.y);
 
     // fill the robot command message
     robot_command.robot_id = 0;
