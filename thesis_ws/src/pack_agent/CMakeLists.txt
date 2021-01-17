@@ -50,10 +50,17 @@ add_executable(agent
 ament_target_dependencies(agent rclcpp pack_msgs pack_util)
 target_link_libraries(agent ${QT5_LIBRARIES})
 
+# agent-param node
+add_executable(agent_param
+        src/agent/agent_param_exec.cpp
+        )
+ament_target_dependencies(agent_param rclcpp)
+
 
 # install nodes
 install(TARGETS
         agent
+        agent_param
         DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)
