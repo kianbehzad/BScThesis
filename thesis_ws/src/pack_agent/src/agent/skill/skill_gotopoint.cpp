@@ -50,7 +50,6 @@ pack_msgs::msg::RobotCommand SkillGotoPoint::execute(const pack_msgs::msg::Skill
     extern_drawer->draw_line(robot.pos.x, robot.pos.y, skill_gotopoint_msg.destination.x, skill_gotopoint_msg.destination.y);
 
     // fill the robot command message
-    robot_command.robot_id = 0;
     robot_command.vel_f = velf;
     robot_command.vel_n = veln;
     robot_command.wheels_speed = false;
