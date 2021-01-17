@@ -34,3 +34,5 @@ agent_param_node:
     I_angle: 0.0
     D_angle: 0.0
     max_vel: 4.0
+    temp_value1: 0.0
+    temp_value2: 0.0

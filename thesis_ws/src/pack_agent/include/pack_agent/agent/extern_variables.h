@@ -17,5 +17,7 @@ extern double extern_P_angle;
 extern double extern_I_angle;
 extern double extern_D_angle;
 extern double extern_max_vel;
+extern double extern_temp_value1;
+extern double extern_temp_value2;
 
 #endif //PACK_AGENT_EXTERN_VARIABLES_H
