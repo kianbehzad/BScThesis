@@ -18,7 +18,7 @@ double extern_max_vel = 4;
 AgentNode::AgentNode(const rclcpp::NodeOptions & options) : Node("agent_node", options)
 {
     // set up parameter client
-    auto parameters_client = std::make_shared<rclcpp::SyncParametersClient>(this);
+    auto parameters_client = std::make_shared<rclcpp::SyncParametersClient>(this, "agent_param_node");
     while (!parameters_client->wait_for_service(1s)) {
         if (!rclcpp::ok()) {
             RCLCPP_ERROR(this->get_logger(), "Interrupted while waiting for the parameter service. Exiting.");

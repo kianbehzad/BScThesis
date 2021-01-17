@@ -46,8 +46,7 @@ pack_msgs::msg::RobotCommand SkillGotoPoint::execute(const pack_msgs::msg::Skill
     double velf = (dir.x*robot_norm_dir.y - dir.y*robot_norm_dir.x) / (robot_dir.x*robot_norm_dir.y - robot_dir.y*robot_norm_dir.x);
     double veln = (dir.y-velf*robot_dir.y)/(robot_norm_dir.y);
 
-    qDebug() << "velf" << velf << "     veln" << velf;
-
+    // fill the robot command message
     robot_command.robot_id = 0;
     robot_command.vel_f = velf;
     robot_command.vel_n = veln;
