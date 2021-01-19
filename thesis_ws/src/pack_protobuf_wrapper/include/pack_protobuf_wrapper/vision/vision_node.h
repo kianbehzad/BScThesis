@@ -47,10 +47,6 @@ private:
     int vision_multicast_port;
     std::string vision_multicast_ip;
 
-    bool is_our_color_yellow = false;
-    bool is_our_side_left = false;
-
-
 };
 
 
