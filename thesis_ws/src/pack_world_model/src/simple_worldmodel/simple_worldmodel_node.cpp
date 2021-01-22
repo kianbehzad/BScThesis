@@ -43,8 +43,6 @@ void SimpleWorldModelNode::vision_detection_callback(const pack_msgs::msg::SSLVi
     wm.is_yellow = is_our_color_yellow;
     wm.header.stamp = rclcpp::Node::now();
 
-    wm.our[0].pos.y = msg->blue[0].pos.x;
-    test = msg->blue[0].pos.x;
     worldmodel_publisher->publish(wm);
     if (is_plotWM_on) publish_plotWM(wm);
 }

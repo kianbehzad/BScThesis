@@ -45,8 +45,7 @@ private:
     bool is_our_side_left;
     bool is_our_color_yellow;
     bool is_plotWM_on;
-    double test;
-
+    
 };
 
 #endif //PACK_WORLD_MODEL_SIMPLE_WORLDMODEL_NODE_H
