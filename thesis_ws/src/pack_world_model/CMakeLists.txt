@@ -68,6 +68,9 @@ target_link_libraries(worldmodel ${QT5_LIBRARIES})
 add_executable(simple_worldmodel
         src/simple_worldmodel/simple_worldmodel_exec.cpp
         src/simple_worldmodel/simple_worldmodel_node.cpp
+
+        src/simple_worldmodel/kalman_filter/kalman_filter.cpp
+        src/simple_worldmodel/kalman_filter/moving_object.cpp
         )
 ament_target_dependencies(simple_worldmodel rclcpp pack_msgs pack_util)
 target_link_libraries(simple_worldmodel ${QT5_LIBRARIES})

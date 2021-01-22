@@ -10,6 +10,7 @@
 #include <string>
 #include <functional>
 
+#include "pack_world_model/simple_worldmodel/kalman_filter/kalman_filter.h"
 #include "pack_msgs/msg/ssl_vision_detection.hpp"
 #include "pack_msgs/msg/world_model.hpp"
 #include "pack_msgs/msg/plot_world_model.hpp"
@@ -35,12 +36,16 @@ private:
 
     rclcpp::Publisher<pack_msgs::msg::WorldModel>::SharedPtr worldmodel_publisher;
     rclcpp::Publisher<pack_msgs::msg::PlotWorldModel>::SharedPtr plot_worldmodel_publisher;
+    void publish_plotWM(const pack_msgs::msg::WorldModel& wm);
+
+    KalmanFilter kalman_filter;
 
     // ros2 parameter values
     bool is_simulation;
     bool is_our_side_left;
     bool is_our_color_yellow;
     bool is_plotWM_on;
+    double test;
 
 };
 
