@@ -44,7 +44,7 @@ WorldModelNode::WorldModelNode(const rclcpp::NodeOptions & options) : Node("worl
 
     //set up world-model publisher
     worldmodel_publisher = this->create_publisher<pack_msgs::msg::WorldModel>("/world_model", 5);
-    plot_worldmodel_publisher = this->create_publisher<pack_msgs::msg::PlotWorldModel>("/plot_world_model", 5);
+    plot_worldmodel_publisher = this->create_publisher<pack_msgs::msg::PlotWorldModel>("/plotter", 5);
 
     // set up vision_detection callback
     vision_detection_subscription = this->create_subscription<pack_msgs::msg::SSLVisionDetection>("/vision_detection", 8, std::bind(&WorldModelNode::vision_detection_callback, this, _1));

@@ -17,7 +17,7 @@ namespace pr {
 /**
  * Converts an SSL DetectionFrame to the ROS version.
  */
-pack_msgs::msg::SSLVisionDetection convert_detection_frame(SSL_DetectionFrame protoFrame, bool isYellow, bool isLeft);
+pack_msgs::msg::SSLVisionDetection convert_detection_frame(const SSL_DetectionFrame& protoFrame);
 
 
 /**

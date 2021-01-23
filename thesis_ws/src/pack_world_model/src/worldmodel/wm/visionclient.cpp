@@ -109,7 +109,7 @@ void CVisionClient::parse(const pack_msgs::msg::SSLVisionDetection::SharedPtr& p
         our_insight[i] = opp_insight[i] = false;
     }
 
-    for (const auto &u : packet->us) {
+    for (const auto &u : packet->blue) {
         int rob_id = u.robot_id;
         if (v[id].ourTeam[rob_id].count() >= MAX_OBJECT) {
             continue;
@@ -127,7 +127,7 @@ void CVisionClient::parse(const pack_msgs::msg::SSLVisionDetection::SharedPtr& p
         our_insight[rob_id] = true;
     }
 
-    for (const auto &i : packet->them) {
+    for (const auto &i : packet->yellow) {
         int rob_id = i.robot_id;
         if (v[id].oppTeam[rob_id].count() >= MAX_OBJECT) {
             continue;

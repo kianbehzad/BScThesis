@@ -13,19 +13,6 @@ GrsimNode::GrsimNode(const rclcpp::NodeOptions & options) : Node("grsim_node", o
         RCLCPP_INFO(this->get_logger(), "parameter service not available, waiting again...");
     }
 
-    // set up worldmodel parameter client
-    auto parameters_worldmodel_client = std::make_shared<rclcpp::SyncParametersClient>(this, "worldmodel_node");
-    while (!parameters_worldmodel_client->wait_for_service(1s)) {
-        if (!rclcpp::ok()) {
-            RCLCPP_ERROR(this->get_logger(), "Interrupted while waiting for the worldmodel parameter service. Exiting.");
-            rclcpp::shutdown();
-        }
-        RCLCPP_INFO(this->get_logger(), "worldmodel parameter service not available, waiting again...");
-    }
-
-    // initialize worldmodel parameters
-    is_our_color_yellow = parameters_worldmodel_client->get_parameter("is_our_color_yellow", is_our_color_yellow);
-
     // set up udp connection
     grsim_ip = parameters_client->get_parameter("grsim_ip", grsim_ip);
     grsim_command_listen_port = parameters_client->get_parameter("grsim_command_listen_port", grsim_command_listen_port);
@@ -69,7 +56,7 @@ void GrsimNode::command_callback(const pack_msgs::msg::RobotCommand::SharedPtr m
 
 void GrsimNode::worldmodel_callback(const pack_msgs::msg::WorldModel::SharedPtr msg)
 {
-    grsim_commands.set_isteamyellow(static_cast<int>(is_our_color_yellow));
+    grsim_commands.set_isteamyellow(static_cast<int>(msg->is_yellow));
     grsim_commands.set_timestamp(0.0);
 
     grSim_Commands* temp_grsim_commands = grsim_packet.mutable_commands();
@@ -145,11 +132,6 @@ void GrsimNode::define_params_change_callback_lambda_function()
                 grsim_command_listen_port = changed_parameter.value.integer_value;
                 udp_send->setport(grsim_command_listen_port);
                 RCLCPP_INFO(this->get_logger(), "stablish udp com: " + grsim_ip +":%d", grsim_command_listen_port);
-            }
-            else if(changed_parameter.name == "is_our_color_yellow")
-            {
-                is_our_color_yellow = changed_parameter.value.bool_value;
-                RCLCPP_INFO(this->get_logger(), "changing color, is_our_color_yellow: %d", is_our_color_yellow);
             }
         }
         for (auto & deleted_parameter : event->deleted_parameters) {

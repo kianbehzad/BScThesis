@@ -54,8 +54,6 @@ private:
     std::string grsim_ip;
     int grsim_command_listen_port;
 
-    bool is_our_color_yellow = false;
-
     grSim_Commands grsim_commands;
     grSim_Packet grsim_packet;
 

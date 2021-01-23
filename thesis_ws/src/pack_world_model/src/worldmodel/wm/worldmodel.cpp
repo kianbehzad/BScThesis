@@ -75,11 +75,15 @@ pack_msgs::msg::WorldModel::SharedPtr WorldModel::getParsianWorldModel() {
     for (int i = 0; i < _MAX_NUM_PLAYERS; ++ i) {
         if (us[i]->isActive()) {
             toParsianMessage(us[i], i);
-            rosWM->our.push_back(rosRobots[i]);
+            if (!extern_isOurColorYellow) rosWM->our.push_back(rosRobots[i]);
+            else rosWM->opp.push_back(rosRobots[i]);
+
         }
         if (them[i]->isActive()) {
             toParsianMessage(them[i], i + 12);
             rosWM->opp.push_back(rosRobots[i + 12]);
+            if (!extern_isOurColorYellow) rosWM->opp.push_back(rosRobots[i + 12]);
+            else rosWM->our.push_back(rosRobots[i + 12]);
         }
     }
 
@@ -110,8 +114,8 @@ void WorldModel::testFunc(const pack_msgs::msg::SSLVisionDetection::SharedPtr &d
     printf("Network Latency (assuming synched system clock) %7.3fms\n", (t_now - detection->t_sent) * 1000.0);
     printf("Total Latency   (assuming synched system clock) %7.3fms\n", (t_now - detection->t_capture) * 1000.0);
     auto balls_n = static_cast<int>(detection->balls.size());
-    auto robots_blue_n = static_cast<int>(detection->us.size());
-    auto robots_yellow_n = static_cast<int>(detection->them.size());
+    auto robots_blue_n = static_cast<int>(detection->blue.size());
+    auto robots_yellow_n = static_cast<int>(detection->yellow.size());
 
     //Ball info:
     for (int i = 0; i < balls_n; i++) {
@@ -122,14 +126,14 @@ void WorldModel::testFunc(const pack_msgs::msg::SSLVisionDetection::SharedPtr &d
 
     //Blue robot info:
     for (int i = 0; i < robots_blue_n; i++) {
-        pack_msgs::msg::SSLVisionDetectionRobot robot = detection->us[i];
+        pack_msgs::msg::SSLVisionDetectionRobot robot = detection->blue[i];
         printf("-Robot(US) (%2d/%2d): ", i + 1, robots_blue_n);
         printRobotInfo(robot);
     }
 
     //Yellow robot info:
     for (int i = 0; i < robots_yellow_n; i++) {
-        pack_msgs::msg::SSLVisionDetectionRobot robot = detection->them[i];
+        pack_msgs::msg::SSLVisionDetectionRobot robot = detection->yellow[i];
         printf("-Robot(THEM) (%2d/%2d): ", i + 1, robots_yellow_n);
         printRobotInfo(robot);
     }
