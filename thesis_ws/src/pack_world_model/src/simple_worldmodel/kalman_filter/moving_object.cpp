@@ -7,14 +7,14 @@
 MovingObject::MovingObject()
 {
     //initial assignments
-    size = 10;
+    size = 8;
     end = size - 1;
     reset_linear_vectors();
     reset_angular_vectors();
 
     weights.resize(size, 0.0);
     for(int i{end}; i >= 0; i--)
-       weights[i] = (i + 1)*(i + 1)*(i + 1);
+       weights[i] = (i + 1)*(i + 1)*(i + 1)*(i + 1)*(i + 1)*10;
 
 
 }
