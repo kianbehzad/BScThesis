@@ -82,12 +82,7 @@ void MovingObject::execute(const double& dt, const rcsc::Vector2D& pos, const rc
         {
             rcsc::Vector2D dir1{dir_trail[end-1]};
             rcsc::Vector2D dir2{dir_trail[end]};
-            double delta_theta = dir2.th().degree() - dir1.th().degree();
-            int sign = delta_theta >= 0 ? +1 : -1;
-            double compliment_delta_theta = delta_theta - 360*sign;
-            //choose narrower angle between delta_theta and compliment_delta_theta
-            double final_delta_theta = min(fabs(delta_theta), fabs(compliment_delta_theta)) == fabs(delta_theta) ? delta_theta : compliment_delta_theta;
-            angularvel_trail[end] = final_delta_theta/dt; //final guess (no filter)
+            angularvel_trail[end] = rcsc::Vector2D::angleBetween_customized(dir1, dir2, true).degree() / dt; //final guess (no filter)
         }
         else
             angularvel_trail[end] = 0.0; //final guess (no filter)
