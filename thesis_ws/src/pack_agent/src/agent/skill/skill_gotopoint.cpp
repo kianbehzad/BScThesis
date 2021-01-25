@@ -7,6 +7,7 @@
 SkillGotoPoint::SkillGotoPoint() : Skill()
 {
     pos_pid = new PID(3, 3, 4);
+    angle_pid = new PID(3, 3, 4);
 }
 
 SkillGotoPoint::~SkillGotoPoint()
@@ -36,9 +37,9 @@ pack_msgs::msg::RobotCommand SkillGotoPoint::execute(const pack_msgs::msg::Skill
     pos_pid->set_i(extern_I_pos);
     pos_pid->set_d(extern_D_pos);
 
-    double error = rcsc::Vector2D(skill_gotopoint_msg.destination).dist(rcsc::Vector2D(robot.pos));
-    double output = pos_pid->execute(error);
-    rcsc::Vector2D dir = output*(rcsc::Vector2D(skill_gotopoint_msg.destination) - rcsc::Vector2D(robot.pos)).norm();
+    double error_pos = rcsc::Vector2D(skill_gotopoint_msg.destination).dist(rcsc::Vector2D(robot.pos));
+    double output_pos = pos_pid->execute(error_pos);
+    rcsc::Vector2D dir = output_pos * (rcsc::Vector2D(skill_gotopoint_msg.destination) - rcsc::Vector2D(robot.pos)).norm();
 
     rcsc::Vector2D robot_dir = rcsc::Vector2D{robot.dir}.norm();
     rcsc::Vector2D robot_norm_dir = robot_dir.rotatedVector(90);
@@ -49,9 +50,22 @@ pack_msgs::msg::RobotCommand SkillGotoPoint::execute(const pack_msgs::msg::Skill
     extern_drawer->choose_pen("darkgray", false);
     extern_drawer->draw_line(robot.pos, rcsc::Vector2D(skill_gotopoint_msg.destination));
 
+    // angle PID controller
+    angle_pid->set_p(extern_P_angle);
+    angle_pid->set_i(extern_I_angle);
+    angle_pid->set_d(extern_D_angle);
+
+    double error_angle = rcsc::Vector2D::angleBetween_customized(robot_dir, rcsc::Vector2D(skill_gotopoint_msg.look_at) - robot.pos, true).degree();
+    double output_angle = angle_pid->execute(error_angle);
+
+    extern_drawer->choose_pen("gray", false);
+    extern_drawer->draw_line(robot.pos, robot.pos+robot_dir*100);
+
+
     // fill the robot command message
     robot_command.vel_f = velf;
     robot_command.vel_n = veln;
+    robot_command.vel_w = output_angle;
     robot_command.wheels_speed = false;
 
     return robot_command;

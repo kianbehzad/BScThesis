@@ -22,6 +22,7 @@ private:
     pack_msgs::msg::SkillGotoPoint skill_gotopoint_msg;
     int id;
     PID* pos_pid;
+    PID* angle_pid;
 
 };
 
