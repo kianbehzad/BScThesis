@@ -58,8 +58,8 @@ pack_msgs::msg::RobotCommand SkillGotoPoint::execute(const pack_msgs::msg::Skill
     double error_angle = rcsc::Vector2D::angleBetween_customized(robot_dir, rcsc::Vector2D(skill_gotopoint_msg.look_at) - robot.pos, true).degree();
     double output_angle = angle_pid->execute(error_angle);
 
-    extern_drawer->choose_pen("gray", false);
-    extern_drawer->draw_line(robot.pos, robot.pos+robot_dir*100);
+    extern_drawer->choose_pen("lightsalmon", false);
+    extern_drawer->draw_line(robot.pos+robot_dir*0.21, robot.pos+robot_dir*(rcsc::Vector2D(robot.pos).dist(skill_gotopoint_msg.look_at)));
 
 
     // fill the robot command message
