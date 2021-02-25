@@ -52,16 +52,15 @@ void Drawer::draw_point(const double& x, const double& y)
     tmp.x = x;  tmp.y = y;
     shapes->points.push_back(tmp);
 }
+
 void Drawer::draw_point(const rcsc::Vector2D& vec)
 {
-    pack_msgs::msg::Vector2D tmp;
-    tmp.x = vec.x;  tmp.y = vec.y;
-    shapes->points.push_back(tmp);
+    draw_point(vec.x, vec.y);
 }
+
 void Drawer::draw_point(const pack_msgs::msg::Vector2D& vec)
 {
-    pack_msgs::msg::Vector2D tmp = vec;
-    shapes->points.push_back(tmp);
+    draw_point(vec.x, vec.y);
 }
 
 void Drawer::draw_rect(const double& left_top_x, const double& left_top_y, const double& width, const double& height)
@@ -75,17 +74,12 @@ void Drawer::draw_rect(const double& left_top_x, const double& left_top_y, const
 
 void Drawer::draw_rect(const rcsc::Vector2D& left_top, const double& width, const double& height)
 {
-    pack_msgs::msg::ShapeRect tmp;
-    tmp.x = left_top.x; tmp.y = left_top.x;
-    tmp.width = width;  tmp.height = height;
-    tmp.fill = fill_the_shape;  tmp.color = color;
-    shapes->rects.push_back(tmp);
+    draw_rect(left_top.x, left_top.y, width, height);
 }
 
 void Drawer::draw_rect(const pack_msgs::msg::ShapeRect& rect)
 {
-    pack_msgs::msg::ShapeRect tmp = rect;
-    shapes->rects.push_back(tmp);
+    draw_rect(rect.x, rect.y, rect.width, rect.height);
 }
 
 void Drawer::draw_circle(const double& center_x, const double& center_y, const double& r)
@@ -99,11 +93,7 @@ void Drawer::draw_circle(const double& center_x, const double& center_y, const d
 
 void Drawer::draw_circle(const rcsc::Vector2D& center, const double& r)
 {
-    pack_msgs::msg::ShapeRect tmp;
-    tmp.x = center.x-r; tmp.y = center.y+r;
-    tmp.width = 2*r;    tmp.height = 2*r;
-    tmp.fill = fill_the_shape;  tmp.color = color;
-    shapes->circles.push_back(tmp);
+    draw_circle(center.x, center.y, r);
 }
 
 void Drawer::draw_ellipse(const double& left_top_x, const double& left_top_y, const double& width, const double& height)
@@ -117,17 +107,12 @@ void Drawer::draw_ellipse(const double& left_top_x, const double& left_top_y, co
 
 void Drawer::draw_ellipse(const rcsc::Vector2D& left_top, const double& width, const double& height)
 {
-    pack_msgs::msg::ShapeRect tmp;
-    tmp.x = left_top.x; tmp.y = left_top.y;
-    tmp.width = width;  tmp.height = height;
-    tmp.fill = fill_the_shape;  tmp.color = color;
-    shapes->circles.push_back(tmp);
+    draw_ellipse(left_top.x, left_top.y, width, height);
 }
 
 void Drawer::draw_ellipse(const pack_msgs::msg::ShapeRect& rect)
 {
-    pack_msgs::msg::ShapeRect tmp = rect;
-    shapes->circles.push_back(tmp);
+    draw_ellipse(rect.x, rect.y, rect.width, rect.height);
 }
 
 void Drawer::draw_triangle(const double& x1, const double& y1, const double& x2, const double& y2, const double& x3, const double& y3)
@@ -142,18 +127,12 @@ void Drawer::draw_triangle(const double& x1, const double& y1, const double& x2,
 
 void Drawer::draw_triangle(const rcsc::Vector2D& p1, const rcsc::Vector2D& p2, const rcsc::Vector2D& p3)
 {
-    pack_msgs::msg::ShapeTriangle tmp;
-    tmp.x1 = p1.x;    tmp.y1 = p1.y;
-    tmp.x2 = p2.x;    tmp.y1 = p2.y;
-    tmp.x3 = p3.x;    tmp.y1 = p3.y;
-    tmp.fill = fill_the_shape;  tmp.color = color;
-    shapes->triangles.push_back(tmp);
+    draw_triangle(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y);
 }
 
 void Drawer::draw_triangle(const pack_msgs::msg::ShapeTriangle& tri)
 {
-    pack_msgs::msg::ShapeTriangle tmp = tri;
-    shapes->triangles.push_back(tmp);
+    draw_triangle(tri.x1, tri.y1, tri.x2, tri.y2, tri.x3, tri.y3);
 }
 
 void Drawer::draw_line(const double& x1, const double& y1, const double& x2, const double& y2)
@@ -167,17 +146,12 @@ void Drawer::draw_line(const double& x1, const double& y1, const double& x2, con
 
 void Drawer::draw_line(const rcsc::Vector2D& p1, const rcsc::Vector2D& p2)
 {
-    pack_msgs::msg::ShapeLine tmp;
-    tmp.x1 = p1.x;    tmp.y1 = p1.y;
-    tmp.x2 = p2.x;    tmp.y2 = p2.y;
-    tmp.color = color;
-    shapes->lines.push_back(tmp);
+    draw_line(p1.x, p1.y, p2.x, p2.y);
 }
 
 void Drawer::draw_line(const pack_msgs::msg::ShapeLine& line)
 {
-    pack_msgs::msg::ShapeLine tmp = line;
-    shapes->lines.push_back(tmp);
+    draw_line(line.x1, line.y1, line.x2, line.y2);
 }
 
 
