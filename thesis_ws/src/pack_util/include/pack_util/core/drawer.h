@@ -43,6 +43,8 @@ public:
     void draw_line(const double& x1, const double& y1, const double& x2, const double& y2);
     void draw_line(const rcsc::Vector2D& p1, const rcsc::Vector2D& p2);
     void draw_line(const pack_msgs::msg::ShapeLine& line);
+    void draw_radial_gradient(const double& center_x, const double& center_y, const double& r);
+    void draw_radial_gradient(const rcsc::Vector2D& center, const double& r);
 
 private:
     pack_msgs::msg::Shapes* shapes;

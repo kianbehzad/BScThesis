@@ -154,5 +154,19 @@ void Drawer::draw_line(const pack_msgs::msg::ShapeLine& line)
     draw_line(line.x1, line.y1, line.x2, line.y2);
 }
 
+void Drawer::draw_radial_gradient(const double& center_x, const double& center_y, const double& r)
+{
+    pack_msgs::msg::ShapeRect tmp;
+    tmp.x = center_x-r; tmp.y = center_y+r;
+    tmp.width = 2*r;    tmp.height = 2*r;
+    tmp.color = color;
+    shapes->radial_gradients.push_back(tmp);
+}
+
+void Drawer::draw_radial_gradient(const rcsc::Vector2D& center, const double& r)
+{
+    draw_radial_gradient(center.x, center.y, r);
+}
+
 
 
