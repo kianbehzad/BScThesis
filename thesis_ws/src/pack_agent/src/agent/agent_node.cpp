@@ -14,6 +14,10 @@ double extern_P_angle = 1;
 double extern_I_angle = 0;
 double extern_D_angle = 0;
 double extern_max_vel = 4;
+double extern_attraction_radius = 2;
+double extern_attraction_step = 1;
+double extern_repulsion_radius = 2;
+double extern_repulsion_step = 1;
 double extern_temp_value1 = 0;
 double extern_temp_value2 = 0;
 
@@ -41,6 +45,10 @@ AgentNode::AgentNode(const rclcpp::NodeOptions & options) : Node("agent_node", o
     extern_I_pos = parameters_client->get_parameter("I_pos", extern_I_pos);
     extern_D_pos = parameters_client->get_parameter("D_pos", extern_D_pos);
     extern_max_vel = parameters_client->get_parameter("max_vel", extern_max_vel);
+    extern_attraction_radius = parameters_client->get_parameter("attraction_radius", extern_attraction_radius);
+    extern_attraction_step = parameters_client->get_parameter("attraction_step", extern_attraction_step);
+    extern_repulsion_radius = parameters_client->get_parameter("repulsion_radius", extern_repulsion_radius);
+    extern_repulsion_step = parameters_client->get_parameter("repulsion_step", extern_repulsion_step);
     extern_temp_value1 = parameters_client->get_parameter("temp_value1", extern_temp_value1);
     extern_temp_value2 = parameters_client->get_parameter("temp_value2", extern_temp_value2);
 
@@ -140,6 +148,26 @@ void AgentNode::define_params_change_callback_lambda_function()
             {
                 extern_max_vel = changed_parameter.value.double_value;
                 if(extern_max_vel == 0)  extern_max_vel = changed_parameter.value.integer_value;//double_value gives 0 if the input has no decimals
+            }
+            else if(changed_parameter.name == "attraction_radius")
+            {
+                extern_attraction_radius = changed_parameter.value.double_value;
+                if(extern_attraction_radius == 0)  extern_attraction_radius = changed_parameter.value.integer_value;//double_value gives 0 if the input has no decimals
+            }
+            else if(changed_parameter.name == "attraction_step")
+            {
+                extern_attraction_step = changed_parameter.value.double_value;
+                if(extern_attraction_step == 0)  extern_attraction_step = changed_parameter.value.integer_value;//double_value gives 0 if the input has no decimals
+            }
+            else if(changed_parameter.name == "repulsion_radius")
+            {
+                extern_repulsion_radius = changed_parameter.value.double_value;
+                if(extern_repulsion_radius == 0)  extern_repulsion_radius = changed_parameter.value.integer_value;//double_value gives 0 if the input has no decimals
+            }
+            else if(changed_parameter.name == "repulsion_step")
+            {
+                extern_repulsion_step = changed_parameter.value.double_value;
+                if(extern_repulsion_step == 0)  extern_repulsion_step = changed_parameter.value.integer_value;//double_value gives 0 if the input has no decimals
             }
             else if(changed_parameter.name == "temp_value1")
             {

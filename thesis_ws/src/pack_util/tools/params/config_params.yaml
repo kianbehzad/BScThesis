@@ -34,5 +34,9 @@ agent_param_node:
     I_angle: 0.00001
     D_angle: 0.5
     max_vel: 4.0
+    attraction_radius: 1.0
+    attraction_step: 2.0
+    repulsion_radius: 1.0
+    repulsion_step: 2.0
     temp_value1: 0.0
     temp_value2: 0.0
