@@ -21,6 +21,7 @@ public:
 private:
     pack_msgs::msg::SkillGotoPointAvoid skill_gotopointavoid_msg;
     int id;
+    PID* angle_pid;
 
 };
 
