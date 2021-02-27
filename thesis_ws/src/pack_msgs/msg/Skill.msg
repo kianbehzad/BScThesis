@@ -6,3 +6,4 @@ uint8 SKILLGOTOPOINTAVOID = 2
 uint8 id
 
 SkillGotoPoint skill_gotopoint
+SkillGotoPointAvoid skill_gotopoint_avoid
