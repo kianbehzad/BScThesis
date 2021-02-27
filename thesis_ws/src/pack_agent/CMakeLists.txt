@@ -45,6 +45,7 @@ add_executable(agent
         src/agent/skill/pid.cpp
         src/agent/skill/skill.cpp
         src/agent/skill/skill_gotopoint.cpp
+        src/agent/skill/skill_gotopoint_avoid.cpp
         src/agent/skill/skill_none.cpp
         )
 ament_target_dependencies(agent rclcpp pack_msgs pack_util)
