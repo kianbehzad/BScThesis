@@ -15,6 +15,7 @@
 #include "pack_agent/agent/extern_variables.h"
 #include "pack_agent/agent/skill/skill.h"
 #include "pack_agent/agent/skill/skill_gotopoint.h"
+#include "pack_agent/agent/skill/skill_gotopoint_avoid.h"
 #include "pack_agent/agent/skill/skill_none.h"
 #include "pack_util/core/drawer.h"
 #include "pack_msgs/msg/robot_command.hpp"
@@ -58,6 +59,7 @@ private:
     // Skills
     Skill* skill;
     SkillGotoPoint* skill_gotopoint;
+    SkillGotoPointAvoid* skill_gotopoint_avoid;
     SkillNone* skill_none;
 
 };
