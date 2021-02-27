@@ -13,6 +13,7 @@ SkillGotoPoint::SkillGotoPoint() : Skill()
 SkillGotoPoint::~SkillGotoPoint()
 {
     delete pos_pid; pos_pid = nullptr;
+    delete angle_pid; angle_pid = nullptr;
 }
 
 pack_msgs::msg::RobotCommand SkillGotoPoint::execute(const pack_msgs::msg::Skill& skill)
