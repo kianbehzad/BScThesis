@@ -45,7 +45,8 @@ pack_msgs::msg::RobotCommand SkillGotoPointAvoid::execute(const pack_msgs::msg::
     rcsc::Vector2D repulsion{0, 0};
     if (skill_gotopointavoid_msg.consider_ball_as_obstacle)
     {
-        repulsion += calculate_repulsion(robot, extern_wm->ball.pos, extern_repulsion_radius, extern_repulsion_step, 0.4);
+//        repulsion += calculate_repulsion_classic(robot, extern_wm->ball.pos, extern_repulsion_radius, extern_repulsion_step, 0.4);
+        repulsion += calculate_repulsion_GNRON(robot, extern_wm->ball.pos, skill_gotopointavoid_msg.destination, extern_repulsion_radius, extern_repulsion_step, 0.4, 3);
         extern_drawer->choose_pen("red", true);
         extern_drawer->draw_radial_gradient(extern_wm->ball.pos, extern_repulsion_radius);
     }
@@ -53,14 +54,16 @@ pack_msgs::msg::RobotCommand SkillGotoPointAvoid::execute(const pack_msgs::msg::
         for(const auto& bot: extern_wm->our)
         {
             if (bot.id == robot.id) continue;
-            repulsion += calculate_repulsion(robot, bot.pos, extern_repulsion_radius, extern_repulsion_step,0.4);
+//            repulsion += calculate_repulsion_classic(robot, bot.pos, extern_repulsion_radius, extern_repulsion_step,0.4);
+            repulsion += calculate_repulsion_GNRON(robot, bot.pos, skill_gotopointavoid_msg.destination, extern_repulsion_radius, extern_repulsion_step, 0.4, 3);
             extern_drawer->choose_pen("red", true);
             extern_drawer->draw_radial_gradient(bot.pos, extern_repulsion_radius);
         }
     if (skill_gotopointavoid_msg.consider_opp_robot_as_obstacle)
         for(const auto& bot: extern_wm->opp)
         {
-            repulsion += calculate_repulsion(robot, bot.pos, extern_repulsion_radius, extern_repulsion_step,0.4);
+//            repulsion += calculate_repulsion_classic(robot, bot.pos, extern_repulsion_radius, extern_repulsion_step,0.4);
+            repulsion += calculate_repulsion_GNRON(robot, bot.pos, skill_gotopointavoid_msg.destination, extern_repulsion_radius, extern_repulsion_step, 0.4, 3);
             extern_drawer->choose_pen("red", true);
             extern_drawer->draw_radial_gradient(bot.pos, extern_repulsion_radius);
         }
@@ -86,7 +89,7 @@ pack_msgs::msg::RobotCommand SkillGotoPointAvoid::execute(const pack_msgs::msg::
     extern_drawer->choose_pen("lightsalmon", false);
     extern_drawer->draw_line(robot.pos+robot_dir*0.21, robot.pos+robot_dir*(rcsc::Vector2D(robot.pos).dist(skill_gotopointavoid_msg.look_at)));
 
-    
+
     // fill the robot command message
     robot_command.vel_f = velf;
     robot_command.vel_n = veln;
@@ -96,12 +99,32 @@ pack_msgs::msg::RobotCommand SkillGotoPointAvoid::execute(const pack_msgs::msg::
     return robot_command;
 }
 
-rcsc::Vector2D SkillGotoPointAvoid::calculate_repulsion(const pack_msgs::msg::Robot& robot,
-                                                        const rcsc::Vector2D& obs_center,
-                                                        const double& obs_radius,
-                                                        const double& rep_step,
-                                                        const double& prediction)
+rcsc::Vector2D SkillGotoPointAvoid::calculate_repulsion_classic(const pack_msgs::msg::Robot& robot,
+                                                                const rcsc::Vector2D& obs_center,
+                                                                const double& obs_radius,
+                                                                const double& rep_step,
+                                                                const double& prediction)
 {
     rcsc::Vector2D robot_obstacle_vec = (rcsc::Vector2D(robot.pos) + rcsc::Vector2D(robot.vel)*prediction) - obs_center;
     return (robot_obstacle_vec.length() <= obs_radius) ? rep_step*(1/robot_obstacle_vec.length() - 1/obs_radius)*(1/(robot_obstacle_vec.length()*robot_obstacle_vec.length()))*(robot_obstacle_vec/robot_obstacle_vec.length()) : rcsc::Vector2D{0, 0};
+}
+
+rcsc::Vector2D SkillGotoPointAvoid::calculate_repulsion_GNRON(const pack_msgs::msg::Robot& robot,
+                                                             const rcsc::Vector2D& obs_center,
+                                                             const rcsc::Vector2D& goal_center,
+                                                             const double& obs_radius,
+                                                             const double& rep_step,
+                                                             const double& prediction,
+                                                             const int& n)
+{
+    rcsc::Vector2D robot_obstacle_vec = (rcsc::Vector2D(robot.pos) + rcsc::Vector2D(robot.vel)*prediction) - obs_center;
+    if(robot_obstacle_vec.length() > obs_radius) return rcsc::Vector2D{0, 0};
+    rcsc::Vector2D robot_goal_vec = (rcsc::Vector2D(robot.pos) + rcsc::Vector2D(robot.vel)*0) - goal_center;
+
+    rcsc::Vector2D robot_obstacle_dir = robot_obstacle_vec.norm();
+    rcsc::Vector2D robot_goal_dir = robot_goal_vec.norm();
+    rcsc::Vector2D Frep1 = rep_step*(1/robot_obstacle_vec.length() - 1/obs_radius)*(pow(robot_goal_vec.length(), n)/pow(robot_obstacle_vec.length(), 2)) * robot_obstacle_dir;
+    rcsc::Vector2D Frep2 = (n/2.0)*rep_step*pow((1/robot_obstacle_vec.length() - 1/obs_radius), 2)*pow(robot_goal_vec.length(), n-1) * -robot_goal_dir;
+
+    return Frep1 + Frep2;
 }

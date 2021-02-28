@@ -17,16 +17,27 @@ public:
     SkillGotoPointAvoid();
     ~SkillGotoPointAvoid();
     pack_msgs::msg::RobotCommand execute(const pack_msgs::msg::Skill& skill);
-    rcsc::Vector2D calculate_repulsion(const pack_msgs::msg::Robot& robot,
-                                        const rcsc::Vector2D& obs_center,
-                                        const double& obs_radius,
-                                        const double& rep_step,
-                                        const double& prediction);
+
 
 private:
     pack_msgs::msg::SkillGotoPointAvoid skill_gotopointavoid_msg;
     int id;
     PID* angle_pid;
+
+    // potential field functions
+    rcsc::Vector2D calculate_repulsion_classic(const pack_msgs::msg::Robot& robot,
+                                       const rcsc::Vector2D& obs_center,
+                                       const double& obs_radius,
+                                       const double& rep_step,
+                                       const double& prediction);
+
+    rcsc::Vector2D calculate_repulsion_GNRON(const pack_msgs::msg::Robot& robot,
+                                               const rcsc::Vector2D& obs_center,
+                                               const rcsc::Vector2D& goal_center,
+                                               const double& obs_radius,
+                                               const double& rep_step,
+                                               const double& prediction,
+                                               const int& n);
 
 };
 
