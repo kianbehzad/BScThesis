@@ -46,7 +46,7 @@ pack_msgs::msg::RobotCommand SkillGotoPointAvoid::execute(const pack_msgs::msg::
     if (skill_gotopointavoid_msg.consider_ball_as_obstacle)
     {
 //        repulsion += calculate_repulsion_classic(robot, extern_wm->ball.pos, extern_repulsion_radius, extern_repulsion_step, 0.4);
-        repulsion += calculate_repulsion_GNRON(robot, extern_wm->ball.pos, skill_gotopointavoid_msg.destination, extern_repulsion_radius, extern_repulsion_step, 0.4, 3);
+        repulsion += calculate_repulsion_GNRON(robot, extern_wm->ball.pos, skill_gotopointavoid_msg.destination, extern_repulsion_radius, extern_repulsion_step, 0.4, 10);
         extern_drawer->choose_pen("red", true);
         extern_drawer->draw_radial_gradient(extern_wm->ball.pos, extern_repulsion_radius);
     }
@@ -55,7 +55,7 @@ pack_msgs::msg::RobotCommand SkillGotoPointAvoid::execute(const pack_msgs::msg::
         {
             if (bot.id == robot.id) continue;
 //            repulsion += calculate_repulsion_classic(robot, bot.pos, extern_repulsion_radius, extern_repulsion_step,0.4);
-            repulsion += calculate_repulsion_GNRON(robot, bot.pos, skill_gotopointavoid_msg.destination, extern_repulsion_radius, extern_repulsion_step, 0.4, 3);
+            repulsion += calculate_repulsion_GNRON(robot, bot.pos, skill_gotopointavoid_msg.destination, extern_repulsion_radius, extern_repulsion_step, 0.4, 10);
             extern_drawer->choose_pen("red", true);
             extern_drawer->draw_radial_gradient(bot.pos, extern_repulsion_radius);
         }
@@ -63,7 +63,7 @@ pack_msgs::msg::RobotCommand SkillGotoPointAvoid::execute(const pack_msgs::msg::
         for(const auto& bot: extern_wm->opp)
         {
 //            repulsion += calculate_repulsion_classic(robot, bot.pos, extern_repulsion_radius, extern_repulsion_step,0.4);
-            repulsion += calculate_repulsion_GNRON(robot, bot.pos, skill_gotopointavoid_msg.destination, extern_repulsion_radius, extern_repulsion_step, 0.4, 3);
+            repulsion += calculate_repulsion_GNRON(robot, bot.pos, skill_gotopointavoid_msg.destination, extern_repulsion_radius, extern_repulsion_step, 0.4, 10);
             extern_drawer->choose_pen("red", true);
             extern_drawer->draw_radial_gradient(bot.pos, extern_repulsion_radius);
         }
