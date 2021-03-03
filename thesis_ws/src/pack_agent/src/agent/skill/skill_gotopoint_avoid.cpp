@@ -31,7 +31,6 @@ pack_msgs::msg::RobotCommand SkillGotoPointAvoid::execute(const pack_msgs::msg::
     if (!found_robot)
     {   qDebug() << "[agent_node] robot id out of range (no id=" << id << " found)"; return robot_command; }
 
-
     // attraction force
     rcsc::Vector2D destination_vec = robot.pos - rcsc::Vector2D{skill_gotopointavoid_msg.destination};
     double att_rad = extern_attraction_radius;
@@ -43,23 +42,28 @@ pack_msgs::msg::RobotCommand SkillGotoPointAvoid::execute(const pack_msgs::msg::
 
     // repulsion force
     rcsc::Vector2D repulsion{0, 0};
+
     if (skill_gotopointavoid_msg.consider_ball_as_obstacle)
     {
         //repulsion += calculate_repulsion_classic(robot, extern_wm->ball.pos, extern_repulsion_radius, extern_repulsion_step, 0.4);
-        repulsion += calculate_repulsion_GNRON(robot, extern_wm->ball.pos, skill_gotopointavoid_msg.destination, extern_repulsion_radius, extern_repulsion_step, 0.4, 10);
+        //repulsion += calculate_repulsion_GNRON(robot, extern_wm->ball.pos, skill_gotopointavoid_msg.destination, extern_repulsion_static_radius, extern_repulsion_static_step, 0.4, 10);
+        repulsion += calculate_repulsion_dynamic(robot, extern_wm->ball, skill_gotopointavoid_msg.destination, extern_repulsion_static_radius, extern_repulsion_static_step, extern_repulsion_static_prediction, extern_repulsion_dynamic_step, extern_repulsion_dynamic_prediction, 10);
     }
     if (skill_gotopointavoid_msg.consider_our_robot_as_obstacle)
         for(const auto& bot: extern_wm->our)
         {
             if (bot.id == robot.id) continue;
             //repulsion += calculate_repulsion_classic(robot, bot.pos, extern_repulsion_radius, extern_repulsion_step,0.4);
-            repulsion += calculate_repulsion_GNRON(robot, bot.pos, skill_gotopointavoid_msg.destination, extern_repulsion_radius, extern_repulsion_step, 0.4, 10);
+            //repulsion += calculate_repulsion_GNRON(robot, bot.pos, skill_gotopointavoid_msg.destination, extern_repulsion_static_radius, extern_repulsion_static_step, extern_repulsion_static_prediction, 10);
+            repulsion += calculate_repulsion_dynamic(robot, bot, skill_gotopointavoid_msg.destination, extern_repulsion_static_radius, extern_repulsion_static_step, extern_repulsion_static_prediction, extern_repulsion_dynamic_step, extern_repulsion_dynamic_prediction, 10);
+
         }
     if (skill_gotopointavoid_msg.consider_opp_robot_as_obstacle)
         for(const auto& bot: extern_wm->opp)
         {
             //repulsion += calculate_repulsion_classic(robot, bot.pos, extern_repulsion_radius, extern_repulsion_step,0.4);
-            repulsion += calculate_repulsion_GNRON(robot, bot.pos, skill_gotopointavoid_msg.destination, extern_repulsion_radius, extern_repulsion_step, 0.4, 10);
+            //repulsion += calculate_repulsion_GNRON(robot, bot.pos, skill_gotopointavoid_msg.destination, extern_repulsion_static_radius, extern_repulsion_static_step, extern_repulsion_static_prediction, 10);
+            repulsion += calculate_repulsion_dynamic(robot, bot, skill_gotopointavoid_msg.destination, extern_repulsion_static_radius, extern_repulsion_static_step, extern_repulsion_static_prediction, extern_repulsion_dynamic_step, extern_repulsion_dynamic_prediction, 10);
         }
 
 
@@ -129,4 +133,33 @@ rcsc::Vector2D SkillGotoPointAvoid::calculate_repulsion_GNRON(const pack_msgs::m
     rcsc::Vector2D Frep2 = (n/2.0)*rep_step*pow((1/robot_obstacle_vec.length() - 1/obs_radius), 2)*pow(robot_goal_vec.length(), n-1) * -robot_goal_dir;
 
     return Frep1 + Frep2;
+}
+
+rcsc::Vector2D SkillGotoPointAvoid::calculate_repulsion_dynamic(const pack_msgs::msg::Robot& robot,
+                                                                const pack_msgs::msg::Robot& obstacle,
+                                                                const rcsc::Vector2D& goal_center,
+                                                                const double& obstacle_radius,
+                                                                const double& static_rep_step,
+                                                                const double& static_prediction,
+                                                                const double& dynamic_rep_step,
+                                                                const double& dynamic_prediction,
+                                                                const int& n)
+{
+    rcsc::Vector2D F_x = calculate_repulsion_GNRON(robot, obstacle.pos, goal_center, obstacle_radius, static_rep_step, static_prediction, n);
+    rcsc::Vector2D F_v{0, 0};
+
+    rcsc::Segment2D rob_prediction_seg{robot.pos+robot.vel*0.1, robot.pos+robot.vel*dynamic_prediction};
+    rcsc::Segment2D obs_prediction_seg{obstacle.pos, obstacle.pos+obstacle.vel*dynamic_prediction};
+
+    rcsc::Vector2D intersection = rob_prediction_seg.intersection(obs_prediction_seg);
+    if (intersection.isValid())
+    {
+        double t_rob_intersect = rcsc::Vector2D{robot.pos}.dist(intersection)/ rcsc::Vector2D{obstacle.vel}.length();
+        double t_obs_intersect = rcsc::Vector2D{obstacle.pos}.dist(intersection)/ rcsc::Vector2D{obstacle.vel}.length();
+        double collide_probability = 1/(10*fabs(t_rob_intersect - t_obs_intersect)+1);
+        rcsc::Vector2D retreat_dir = (obstacle.pos - intersection).norm();
+        F_v = dynamic_rep_step*collide_probability * retreat_dir;
+    }
+
+    return F_x + F_v;
 }

@@ -7,6 +7,7 @@
 
 #include "pack_agent/agent/skill/skill.h"
 #include "pack_agent/agent/skill/pid.h"
+#include "pack_util/geom/segment_2d.h"
 #include "pack_msgs/msg/skill_goto_point_avoid.hpp"
 
 #include <QDebug>
@@ -37,6 +38,16 @@ private:
                                                const double& obs_radius,
                                                const double& rep_step,
                                                const double& prediction,
+                                               const int& n);
+
+    rcsc::Vector2D calculate_repulsion_dynamic(const pack_msgs::msg::Robot& robot,
+                                               const pack_msgs::msg::Robot& obstacle,
+                                               const rcsc::Vector2D& goal_center,
+                                               const double& obstacle_radius,
+                                               const double& static_rep_step,
+                                               const double& static_prediction,
+                                               const double& dynamic_rep_step,
+                                               const double& dynamic_prediction,
                                                const int& n);
 
 };
