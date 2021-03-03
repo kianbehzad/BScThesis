@@ -16,8 +16,11 @@ double extern_D_angle = 0;
 double extern_max_vel = 4;
 double extern_attraction_radius = 2;
 double extern_attraction_step = 1;
-double extern_repulsion_radius = 2;
-double extern_repulsion_step = 1;
+double extern_repulsion_static_radius = 0.5;
+double extern_repulsion_static_step = 100;
+double extern_repulsion_static_prediction = 0.4;
+double extern_repulsion_dynamic_step = 10000;
+double extern_repulsion_dynamic_prediction = 0.8;
 double extern_temp_value1 = 0;
 double extern_temp_value2 = 0;
 
@@ -47,8 +50,11 @@ AgentNode::AgentNode(const rclcpp::NodeOptions & options) : Node("agent_node", o
     extern_max_vel = parameters_client->get_parameter("max_vel", extern_max_vel);
     extern_attraction_radius = parameters_client->get_parameter("attraction_radius", extern_attraction_radius);
     extern_attraction_step = parameters_client->get_parameter("attraction_step", extern_attraction_step);
-    extern_repulsion_radius = parameters_client->get_parameter("repulsion_radius", extern_repulsion_radius);
-    extern_repulsion_step = parameters_client->get_parameter("repulsion_step", extern_repulsion_step);
+    extern_repulsion_static_radius = parameters_client->get_parameter("repulsion_static_radius", extern_repulsion_static_radius);
+    extern_repulsion_static_step = parameters_client->get_parameter("repulsion_static_step", extern_repulsion_static_step);
+    extern_repulsion_static_prediction = parameters_client->get_parameter("repulsion_static_prediction", extern_repulsion_static_prediction);
+    extern_repulsion_dynamic_step = parameters_client->get_parameter("repulsion_dynamic_step", extern_repulsion_dynamic_step);
+    extern_repulsion_dynamic_prediction = parameters_client->get_parameter("repulsion_dynamic_prediction", extern_repulsion_dynamic_prediction);
     extern_temp_value1 = parameters_client->get_parameter("temp_value1", extern_temp_value1);
     extern_temp_value2 = parameters_client->get_parameter("temp_value2", extern_temp_value2);
 
@@ -161,15 +167,30 @@ void AgentNode::define_params_change_callback_lambda_function()
                 extern_attraction_step = changed_parameter.value.double_value;
                 if(extern_attraction_step == 0)  extern_attraction_step = changed_parameter.value.integer_value;//double_value gives 0 if the input has no decimals
             }
-            else if(changed_parameter.name == "repulsion_radius")
+            else if(changed_parameter.name == "repulsion_static_radius")
             {
-                extern_repulsion_radius = changed_parameter.value.double_value;
-                if(extern_repulsion_radius == 0)  extern_repulsion_radius = changed_parameter.value.integer_value;//double_value gives 0 if the input has no decimals
+                extern_repulsion_static_radius = changed_parameter.value.double_value;
+                if(extern_repulsion_static_radius == 0)  extern_repulsion_static_radius = changed_parameter.value.integer_value;//double_value gives 0 if the input has no decimals
             }
-            else if(changed_parameter.name == "repulsion_step")
+            else if(changed_parameter.name == "repulsion_static_step")
             {
-                extern_repulsion_step = changed_parameter.value.double_value;
-                if(extern_repulsion_step == 0)  extern_repulsion_step = changed_parameter.value.integer_value;//double_value gives 0 if the input has no decimals
+                extern_repulsion_static_step = changed_parameter.value.double_value;
+                if(extern_repulsion_static_step == 0)  extern_repulsion_static_step = changed_parameter.value.integer_value;//double_value gives 0 if the input has no decimals
+            }
+            else if(changed_parameter.name == "repulsion_static_prediction")
+            {
+                extern_repulsion_static_prediction = changed_parameter.value.double_value;
+                if(extern_repulsion_static_prediction == 0)  extern_repulsion_static_prediction = changed_parameter.value.integer_value;//double_value gives 0 if the input has no decimals
+            }
+            else if(changed_parameter.name == "repulsion_dynamic_step")
+            {
+                extern_repulsion_dynamic_step = changed_parameter.value.double_value;
+                if(extern_repulsion_dynamic_step == 0)  extern_repulsion_dynamic_step = changed_parameter.value.integer_value;//double_value gives 0 if the input has no decimals
+            }
+            else if(changed_parameter.name == "repulsion_dynamic_prediction")
+            {
+                extern_repulsion_dynamic_prediction = changed_parameter.value.double_value;
+                if(extern_repulsion_dynamic_prediction == 0)  extern_repulsion_dynamic_prediction = changed_parameter.value.integer_value;//double_value gives 0 if the input has no decimals
             }
             else if(changed_parameter.name == "temp_value1")
             {

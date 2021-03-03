@@ -36,7 +36,10 @@ agent_param_node:
     max_vel: 4.0
     attraction_radius: 2.5
     attraction_step: 1.5
-    repulsion_radius: 0.5
-    repulsion_step: 100.0
+    repulsion_static_radius: 0.5
+    repulsion_static_step: 100.0
+    repulsion_static_prediction: 0.4
+    repulsion_dynamic_step: 10000.0
+    repulsion_dynamic_prediction: 0.8
     temp_value1: 0.0
     temp_value2: 0.0
