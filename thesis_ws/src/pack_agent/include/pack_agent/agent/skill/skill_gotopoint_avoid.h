@@ -24,6 +24,7 @@ private:
     pack_msgs::msg::SkillGotoPointAvoid skill_gotopointavoid_msg;
     int id;
     PID* angle_pid;
+    int local_minimum_counter;
 
     // potential field functions
     rcsc::Vector2D calculate_repulsion_classic(const pack_msgs::msg::Robot& robot,

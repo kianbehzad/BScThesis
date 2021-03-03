@@ -7,6 +7,7 @@
 SkillGotoPointAvoid::SkillGotoPointAvoid() : Skill()
 {
     angle_pid = new PID(3, 3, 4);
+    local_minimum_counter = 0;
 }
 
 SkillGotoPointAvoid::~SkillGotoPointAvoid()
@@ -70,6 +71,19 @@ pack_msgs::msg::RobotCommand SkillGotoPointAvoid::execute(const pack_msgs::msg::
     // final force calculation
     rcsc::Vector2D final_force = attraction + repulsion;
     if (final_force.length() > extern_max_vel) final_force.setLength(extern_max_vel);
+
+    // solve local minimum problem
+    if (rcsc::Vector2D{robot.vel}.length() < 0.7 && rcsc::Vector2D{robot.pos}.dist(skill_gotopointavoid_msg.destination) > 0.2)
+        local_minimum_counter++;
+    else
+        local_minimum_counter = 0;
+    if (local_minimum_counter > 35) // local minimum detected
+    {
+        rcsc::Vector2D destination_robot_dir = (rcsc::Vector2D{skill_gotopointavoid_msg.destination} - rcsc::Vector2D{robot.pos}).norm();
+        destination_robot_dir.rotate(90);
+        destination_robot_dir.setLength(extern_max_vel);
+        final_force = destination_robot_dir;
+    }
 
     // apply final force as velocity to robot
     rcsc::Vector2D robot_dir = rcsc::Vector2D{robot.dir}.norm();
