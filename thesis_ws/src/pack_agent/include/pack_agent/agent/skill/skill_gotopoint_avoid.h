@@ -6,11 +6,13 @@
 #define PACK_AGENT_SKILL_GOTOPOINT_AVOID_H
 
 #include "pack_agent/agent/skill/skill.h"
-#include "pack_agent/agent/skill/pid.h"
+#include "pack_agent/agent/skill/control_tools.h"
 #include "pack_util/geom/segment_2d.h"
 #include "pack_msgs/msg/skill_goto_point_avoid.hpp"
 
 #include <QDebug>
+
+using control_tool::PID;
 
 class SkillGotoPointAvoid : public Skill
 {
@@ -25,31 +27,6 @@ private:
     int id;
     PID* angle_pid;
     int local_minimum_counter;
-
-    // potential field functions
-    rcsc::Vector2D calculate_repulsion_classic(const pack_msgs::msg::Robot& robot,
-                                       const rcsc::Vector2D& obs_center,
-                                       const double& obs_radius,
-                                       const double& rep_step,
-                                       const double& prediction);
-
-    rcsc::Vector2D calculate_repulsion_GNRON(const pack_msgs::msg::Robot& robot,
-                                               const rcsc::Vector2D& obs_center,
-                                               const rcsc::Vector2D& goal_center,
-                                               const double& obs_radius,
-                                               const double& rep_step,
-                                               const double& prediction,
-                                               const int& n);
-
-    rcsc::Vector2D calculate_repulsion_dynamic(const pack_msgs::msg::Robot& robot,
-                                               const pack_msgs::msg::Robot& obstacle,
-                                               const rcsc::Vector2D& goal_center,
-                                               const double& obstacle_radius,
-                                               const double& static_rep_step,
-                                               const double& static_prediction,
-                                               const double& dynamic_rep_step,
-                                               const double& dynamic_prediction,
-                                               const int& n);
 
 };
 

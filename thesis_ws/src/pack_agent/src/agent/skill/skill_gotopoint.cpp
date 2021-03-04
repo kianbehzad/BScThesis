@@ -42,11 +42,9 @@ pack_msgs::msg::RobotCommand SkillGotoPoint::execute(const pack_msgs::msg::Skill
     double output_pos = pos_pid->execute(error_pos);
     rcsc::Vector2D dir = output_pos * (rcsc::Vector2D(skill_gotopoint_msg.destination) - rcsc::Vector2D(robot.pos)).norm();
 
-    rcsc::Vector2D robot_dir = rcsc::Vector2D{robot.dir}.norm();
-    rcsc::Vector2D robot_norm_dir = robot_dir.rotatedVector(90);
-
-    double velf = (dir.x*robot_norm_dir.y - dir.y*robot_norm_dir.x) / (robot_dir.x*robot_norm_dir.y - robot_dir.y*robot_norm_dir.x);
-    double veln = (dir.y-velf*robot_dir.y)/(robot_norm_dir.y);
+    // calculate robot vels to attain the desied velocity
+    double velf, veln;
+    control_tool::calculate_robot_linear_vels(dir, robot.dir, velf, veln);
 
     extern_drawer->choose_pen("darkgray", false);
     extern_drawer->draw_line(robot.pos, rcsc::Vector2D(skill_gotopoint_msg.destination));
@@ -59,11 +57,11 @@ pack_msgs::msg::RobotCommand SkillGotoPoint::execute(const pack_msgs::msg::Skill
         angle_pid->set_i(extern_I_angle);
         angle_pid->set_d(extern_D_angle);
 
-        double error_angle = rcsc::Vector2D::angleBetween_customized(robot_dir,rcsc::Vector2D(skill_gotopoint_msg.look_at) -robot.pos, true).degree();
+        double error_angle = rcsc::Vector2D::angleBetween_customized(robot.dir,rcsc::Vector2D(skill_gotopoint_msg.look_at) -robot.pos, true).degree();
         output_angle = angle_pid->execute(error_angle);
 
         extern_drawer->choose_pen("lightsalmon", false);
-        extern_drawer->draw_line(robot.pos + robot_dir * 0.21,robot.pos + robot_dir * (rcsc::Vector2D(robot.pos).dist(skill_gotopoint_msg.look_at)));
+        extern_drawer->draw_line(robot.pos + robot.dir * 0.21,robot.pos + robot.dir * (rcsc::Vector2D(robot.pos).dist(skill_gotopoint_msg.look_at)));
     }
 
     // fill the robot command message
