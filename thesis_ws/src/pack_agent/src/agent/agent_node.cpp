@@ -61,6 +61,7 @@ AgentNode::AgentNode(const rclcpp::NodeOptions & options) : Node("agent_node", o
     // setup skills
     skill_gotopoint = new SkillGotoPoint{};
     skill_gotopoint_avoid = new SkillGotoPointAvoid{};
+    skill_direct_velocity = new SkillDirectVelocity{};
     skill_none = new SkillNone{};
 
     // set up world_model callback
@@ -83,6 +84,7 @@ AgentNode::~AgentNode()
    delete extern_drawer; extern_drawer = nullptr;
    delete skill_gotopoint; skill_gotopoint = nullptr;
    delete skill_gotopoint_avoid; skill_gotopoint_avoid = nullptr;
+   delete skill_direct_velocity; skill_direct_velocity = nullptr;
    delete skill_none; skill_none = nullptr;
 }
 
@@ -99,7 +101,13 @@ void AgentNode::worldmodel_callback(const pack_msgs::msg::WorldModel::SharedPtr 
             case pack_msgs::msg::Skill::SKILLGOTOPOINTAVOID:
                 skill = skill_gotopoint_avoid;
             break;
+            case pack_msgs::msg::Skill::SKILLDIRECTVELOCITY:
+                skill = skill_direct_velocity;
+            break;
             case pack_msgs::msg::Skill::NONE:
+                skill = skill_none;
+            break;
+            default:
                 skill = skill_none;
             break;
         }

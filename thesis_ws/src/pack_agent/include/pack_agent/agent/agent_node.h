@@ -16,6 +16,7 @@
 #include "pack_agent/agent/skill/skill.h"
 #include "pack_agent/agent/skill/skill_gotopoint.h"
 #include "pack_agent/agent/skill/skill_gotopoint_avoid.h"
+#include "pack_agent/agent/skill/skill_direct_velocity.h"
 #include "pack_agent/agent/skill/skill_none.h"
 #include "pack_util/core/drawer.h"
 #include "pack_msgs/msg/robot_command.hpp"
@@ -60,6 +61,7 @@ private:
     Skill* skill;
     SkillGotoPoint* skill_gotopoint;
     SkillGotoPointAvoid* skill_gotopoint_avoid;
+    SkillDirectVelocity* skill_direct_velocity;
     SkillNone* skill_none;
 
 };
