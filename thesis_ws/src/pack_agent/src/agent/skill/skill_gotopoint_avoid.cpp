@@ -92,15 +92,18 @@ pack_msgs::msg::RobotCommand SkillGotoPointAvoid::execute(const pack_msgs::msg::
     double veln = (final_force.y-velf*robot_dir.y)/(robot_norm_dir.y);
 
     // angle PID controller
-    angle_pid->set_p(extern_P_angle);
-    angle_pid->set_i(extern_I_angle);
-    angle_pid->set_d(extern_D_angle);
-    double error_angle = rcsc::Vector2D::angleBetween_customized(robot_dir, rcsc::Vector2D(skill_gotopointavoid_msg.look_at) - robot.pos, true).degree();
-    double output_angle = angle_pid->execute(error_angle);
-    // draw
-    extern_drawer->choose_pen("lightsalmon", false);
-    extern_drawer->draw_line(robot.pos+robot_dir*0.21, robot.pos+robot_dir*(rcsc::Vector2D(robot.pos).dist(skill_gotopointavoid_msg.look_at)));
-
+    double output_angle = 0;
+    if (rcsc::Vector2D{skill_gotopointavoid_msg.look_at}.isValid())
+    {
+        angle_pid->set_p(extern_P_angle);
+        angle_pid->set_i(extern_I_angle);
+        angle_pid->set_d(extern_D_angle);
+        double error_angle = rcsc::Vector2D::angleBetween_customized(robot_dir, rcsc::Vector2D(skill_gotopointavoid_msg.look_at) - robot.pos, true).degree();
+        output_angle = angle_pid->execute(error_angle);
+        // draw
+        extern_drawer->choose_pen("lightsalmon", false);
+        extern_drawer->draw_line(robot.pos + robot_dir * 0.21, robot.pos + robot_dir *(rcsc::Vector2D(robot.pos).dist(skill_gotopointavoid_msg.look_at)));
+    }
 
     // fill the robot command message
     robot_command.vel_f = velf;
