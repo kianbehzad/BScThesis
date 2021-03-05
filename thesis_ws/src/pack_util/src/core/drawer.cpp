@@ -4,8 +4,6 @@
 
 #include "pack_util/core/drawer.h"
 
-#include <utility>
-
 Drawer::Drawer(std::string _publisher_name) : publisher_name{_publisher_name}
 {
     shapes = new pack_msgs::msg::Shapes;
