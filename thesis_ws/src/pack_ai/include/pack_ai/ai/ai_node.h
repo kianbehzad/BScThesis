@@ -12,6 +12,8 @@
 
 #include <QDebug>
 
+#include "pack_ai/ai/extern_variables.h"
+
 #include "rclcpp/rclcpp.hpp"
 
 using std::placeholders::_1;
@@ -24,6 +26,10 @@ public:
     ~AINode();
 
 private:
+    // parameter client
+    std::function<void(const rcl_interfaces::msg::ParameterEvent::SharedPtr)> params_change_callback;
+    rclcpp::Subscription<rcl_interfaces::msg::ParameterEvent>::SharedPtr parameter_event_sub;
+    void define_params_change_callback_lambda_function();
 
 
 };

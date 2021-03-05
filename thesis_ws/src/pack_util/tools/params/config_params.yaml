@@ -43,3 +43,9 @@ agent_param_node:
     repulsion_dynamic_prediction: 0.8
     temp_value1: 0.0
     temp_value2: 0.0
+ai_node:
+  ros__parameters:
+    temp_value1: 0.0
+    temp_value2: 0.0
+
+    
