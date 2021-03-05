@@ -6,6 +6,7 @@
 
 pack_msgs::msg::WorldModel::SharedPtr extern_wm;
 Drawer* extern_drawer;
+SkillHandler* extern_skill_handler;
 double extern_temp_value1 = 0;
 double extern_temp_value2 = 0;
 
@@ -35,6 +36,11 @@ AINode::AINode(const rclcpp::NodeOptions & options) : Node("ai_node", options)
     // set up debug draws publisher
     extern_drawer = new Drawer{this->get_name()};
     debugdraws_publisher = this->create_publisher<pack_msgs::msg::Shapes>("/debug_draws", 5);
+
+    // set up skill publisher
+    extern_skill_handler = new SkillHandler{};
+    for (int i = 0; i < knowledge::MAX_ROBOT_NUM; i++)
+        skill_publisher[i] = this->create_publisher<pack_msgs::msg::Skill>("/agent_"+QString::number(i).toStdString()+"/skill", 5);
 }
 
 AINode::~AINode()
@@ -47,11 +53,14 @@ void AINode::worldmodel_callback(const pack_msgs::msg::WorldModel::SharedPtr msg
 {
     extern_wm = msg;
 
-    extern_drawer->choose_pen("red", true);
-    extern_drawer->draw_circle(1, 1, 0.5);
-    extern_drawer->choose_pen("blue", true);
-    extern_drawer->draw_rect(-3, -3, 2, 1);
+    extern_skill_handler->direct_velocity(3, rcsc::Vector2D{1, 0});
+    extern_skill_handler->gotopoint(0, rcsc::Vector2D{0, 0}, rcsc::Vector2D{4.5, 0});
+    extern_skill_handler->gotopoint_avoid(1, rcsc::Vector2D{4, 0}, rcsc::Vector2D{}.invalidate(), true);
 
+    // publish all assigned skills
+    for(const auto& skill : extern_skill_handler->get_skills())
+        skill_publisher[skill.id]->publish(skill);
+    // publish all draws
     debugdraws_publisher->publish(extern_drawer->get_draws());
 }
 

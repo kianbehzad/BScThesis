@@ -11,10 +11,14 @@
 #include <functional>
 
 #include <QDebug>
+#include <QString>
 
 #include "pack_ai/ai/extern_variables.h"
 #include "pack_util/core/drawer.h"
+#include "pack_util/core/skill_handler.h"
+#include "pack_util/core/knowledge.h"
 #include "pack_msgs/msg/world_model.hpp"
+#include "pack_msgs/msg/skill.hpp"
 
 #include "rclcpp/rclcpp.hpp"
 
@@ -39,6 +43,9 @@ private:
 
     // debug draws publisher
     rclcpp::Publisher<pack_msgs::msg::Shapes>::SharedPtr debugdraws_publisher;
+
+    // skill publisher
+    rclcpp::Publisher<pack_msgs::msg::Skill>::SharedPtr skill_publisher[knowledge::MAX_ROBOT_NUM];
 
 
 };

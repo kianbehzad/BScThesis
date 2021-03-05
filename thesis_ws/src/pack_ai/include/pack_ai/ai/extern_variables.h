@@ -7,9 +7,11 @@
 
 #include "pack_msgs/msg/world_model.hpp"
 #include "pack_util/core/drawer.h"
+#include "pack_util/core/skill_handler.h"
 
 extern pack_msgs::msg::WorldModel::SharedPtr extern_wm;
 extern Drawer* extern_drawer;
+extern SkillHandler* extern_skill_handler;
 extern double extern_temp_value1;
 extern double extern_temp_value2;
 
