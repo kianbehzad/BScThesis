@@ -5,6 +5,7 @@
 #include "pack_ai/ai/ai_node.h"
 
 pack_msgs::msg::WorldModel::SharedPtr extern_wm;
+Drawer* extern_drawer;
 double extern_temp_value1 = 0;
 double extern_temp_value2 = 0;
 
@@ -31,18 +32,27 @@ AINode::AINode(const rclcpp::NodeOptions & options) : Node("ai_node", options)
     // set up world_model callback
     worldmodel_subscription = this->create_subscription<pack_msgs::msg::WorldModel>("/world_model", 10, std::bind(&AINode::worldmodel_callback, this, _1));
 
-
+    // set up debug draws publisher
+    extern_drawer = new Drawer{this->get_name()};
+    debugdraws_publisher = this->create_publisher<pack_msgs::msg::Shapes>("/debug_draws", 5);
 }
 
 AINode::~AINode()
 {
+    delete extern_drawer; extern_drawer = nullptr;
 
 }
 
 void AINode::worldmodel_callback(const pack_msgs::msg::WorldModel::SharedPtr msg)
 {
     extern_wm = msg;
-    qDebug() << extern_wm->ball.pos.x;
+
+    extern_drawer->choose_pen("red", true);
+    extern_drawer->draw_circle(1, 1, 0.5);
+    extern_drawer->choose_pen("blue", true);
+    extern_drawer->draw_rect(-3, -3, 2, 1);
+
+    debugdraws_publisher->publish(extern_drawer->get_draws());
 }
 
 void AINode::define_params_change_callback_lambda_function()
