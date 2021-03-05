@@ -1,0 +1,7 @@
+Vector2D destination
+Vector2D look_at
+bool consider_ball_as_obstacle
+bool consider_our_robot_as_obstacle
+bool consider_opp_robot_as_obstacle
+bool consider_our_penalty_as_obstacle
+bool consider_opp_penalty_as_obstacle

@@ -192,6 +192,20 @@ void SoccerView::draw_debug_draws()
 
             painter->drawLine(CVTX(line.x1), CVTY(line.y1), CVTX(line.x2), CVTY(line.y2));
         }
+
+        for(const auto& radial_gradient : value->radial_gradients)
+        {
+            QColor color {QString::fromStdString(radial_gradient.color)};
+
+            QRadialGradient gradient(CVTX(radial_gradient.x + radial_gradient.width/2), CVTY(radial_gradient.y - radial_gradient.height/2), CVTM(radial_gradient.height/2));
+            gradient.setColorAt(0, color);
+            gradient.setColorAt(1, QColor::fromRgbF(0, 0, 0, 0));
+            QBrush brush(gradient);
+
+            painter->setPen(Qt::NoPen);
+            painter->setBrush(brush);
+            painter->drawEllipse(CVTX(radial_gradient.x), CVTY(radial_gradient.y), CVTM(radial_gradient.width), CVTM(radial_gradient.height));
+        }
     }
 
 }

@@ -429,6 +429,27 @@ public:
         return AngleDeg::normalize_angle(v2.th().degree() - v1.th().degree());
     }
 
+    /*!
+      \brief static utility. calculate angle between two vectors
+      \param v1 first vector
+      \param v2 decond vector
+      \param return_acute_angle decides wich angle to be returned. two angles can be found between two
+             vectors: acute_angle(narrower) or obtuse_angle(broader)
+      \return degree of angle between two vectors
+    */
+    inline
+    static
+    AngleDeg angleBetween_customized(const Vector2D& v1, const Vector2D& v2, bool return_acute_angle = true) {
+        double delta_theta = AngleDeg::normalize_angle(v2.th().degree() - v1.th().degree());
+        int sign = delta_theta >= 0 ? +1 : -1;
+        double compliment_delta_theta = delta_theta - 360*sign;
+
+        double acute_delta_theta = std::min(fabs(delta_theta), fabs(compliment_delta_theta)) == fabs(delta_theta) ? delta_theta : compliment_delta_theta;
+        double obtuse_delta_theta = std::min(fabs(delta_theta), fabs(compliment_delta_theta)) == fabs(delta_theta) ? compliment_delta_theta : delta_theta;
+
+        return return_acute_angle ? acute_delta_theta : obtuse_delta_theta;
+    }
+
     //////////////////////////////////////////////
     // stream utility
 

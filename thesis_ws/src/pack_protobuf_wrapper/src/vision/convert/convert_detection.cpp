@@ -13,7 +13,7 @@ namespace pr {
 /**
  * Converts a protoBuf ssl_vision_detection to the ROS version.
  */
-    pack_msgs::msg::SSLVisionDetection convert_detection_frame(SSL_DetectionFrame protoFrame, bool isYellow, bool isLeft) {
+    pack_msgs::msg::SSLVisionDetection convert_detection_frame(const SSL_DetectionFrame& protoFrame) {
 
     pack_msgs::msg::SSLVisionDetection rosFrame;
 
@@ -32,21 +32,13 @@ namespace pr {
     for (int i = 0; i < protoFrame.robots_yellow().size(); ++i) {
         SSL_DetectionRobot protoBot = protoFrame.robots_yellow().Get(i);
         pack_msgs::msg::SSLVisionDetectionRobot rosBot = convert_detection_robot(protoBot);
-        if (isYellow) {
-            rosFrame.us.push_back(rosBot);
-        } else {
-            rosFrame.them.push_back(rosBot);
-        }
+        rosFrame.yellow.push_back(rosBot);
     }
 
     for (int i = 0; i < protoFrame.robots_blue().size(); ++i) {
         SSL_DetectionRobot protoBot = protoFrame.robots_blue().Get(i);
         pack_msgs::msg::SSLVisionDetectionRobot rosBot = convert_detection_robot(protoBot);
-        if (isYellow) {
-            rosFrame.them.push_back(rosBot);
-        } else {
-            rosFrame.us.push_back(rosBot);
-        }
+        rosFrame.blue.push_back(rosBot);
     }
 
     return rosFrame;

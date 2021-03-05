@@ -11,6 +11,7 @@ worldmodel_node:
     is_simulation: True
     is_our_side_left: True
     is_our_color_yellow: False
+    is_plotWM_on: False
     cam_num: 1
     camera_0: True
     camera_1: False
@@ -24,3 +25,21 @@ soccer_view_node:
   ros__parameters:
     active_soccer_view: False
     draw_debugs: False
+agent_param_node:
+  ros__parameters:
+    P_pos: 6.0
+    I_pos: 0.0
+    D_pos: 80.0
+    P_angle: 0.21
+    I_angle: 0.00001
+    D_angle: 0.5
+    max_vel: 4.0
+    attraction_radius: 2.5
+    attraction_step: 1.5
+    repulsion_static_radius: 0.5
+    repulsion_static_step: 100.0
+    repulsion_static_prediction: 0.4
+    repulsion_dynamic_step: 10000.0
+    repulsion_dynamic_prediction: 0.8
+    temp_value1: 0.0
+    temp_value2: 0.0

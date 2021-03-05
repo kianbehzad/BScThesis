@@ -15,6 +15,7 @@
 #include <QPen>
 #include <QWheelEvent>
 #include <QMap>
+#include <QRadialGradient>
 
 #include <memory>
 #include <chrono>

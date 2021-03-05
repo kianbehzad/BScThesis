@@ -6,3 +6,4 @@ ShapeRect[] rects
 ShapeRect[] circles
 ShapeTriangle[] triangles
 ShapeLine[] lines
+ShapeRect[] radial_gradients

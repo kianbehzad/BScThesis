@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(pack_world_model)
+project(pack_agent)
 
 # Default to C99
 if(NOT CMAKE_C_STANDARD)
@@ -38,47 +38,31 @@ include_directories(
         ${pack_util_INCLUDE_DIRS}
 )
 
-get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
-foreach(dir ${dirs})
-  message(STATUS "dir='${dir}'")
-endforeach()
-
-# worldmodel node
-add_executable(worldmodel
-        src/worldmodel/worldmodel_exec.cpp
-        src/worldmodel/worldmodel_node.cpp
-
-        src/worldmodel/util/balltracker.cpp
-        src/worldmodel/util/kalman.cpp
-        src/worldmodel/util/robottracker.cpp
-        src/worldmodel/util/tracker.cpp
-        src/worldmodel/wm/ball.cpp
-        src/worldmodel/wm/halfworld.cpp
-        src/worldmodel/wm/movingobject.cpp
-        src/worldmodel/wm/rawobject.cpp
-        src/worldmodel/wm/robot.cpp
-        src/worldmodel/wm/visionbelief.cpp
-        src/worldmodel/wm/visionclient.cpp
-        src/worldmodel/wm/worldmodel.cpp
+# agent node
+add_executable(agent
+        src/agent/agent_exec.cpp
+        src/agent/agent_node.cpp
+        src/agent/skill/control_tools.cpp
+        src/agent/skill/skill.cpp
+        src/agent/skill/skill_gotopoint.cpp
+        src/agent/skill/skill_gotopoint_avoid.cpp
+        src/agent/skill/skill_direct_velocity.cpp
+        src/agent/skill/skill_none.cpp
         )
-ament_target_dependencies(worldmodel rclcpp pack_msgs pack_util)
-target_link_libraries(worldmodel ${QT5_LIBRARIES})
+ament_target_dependencies(agent rclcpp pack_msgs pack_util)
+target_link_libraries(agent ${QT5_LIBRARIES})
 
-# simple_worldmodel node
-add_executable(simple_worldmodel
-        src/simple_worldmodel/simple_worldmodel_exec.cpp
-        src/simple_worldmodel/simple_worldmodel_node.cpp
-
-        src/simple_worldmodel/kalman_filter/kalman_filter.cpp
-        src/simple_worldmodel/kalman_filter/moving_object.cpp
+# agent-param node
+add_executable(agent_param
+        src/agent/agent_param_exec.cpp
         )
-ament_target_dependencies(simple_worldmodel rclcpp pack_msgs pack_util)
-target_link_libraries(simple_worldmodel ${QT5_LIBRARIES})
+ament_target_dependencies(agent_param rclcpp)
+
 
 # install nodes
 install(TARGETS
-        worldmodel
-        simple_worldmodel
+        agent
+        agent_param
         DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)

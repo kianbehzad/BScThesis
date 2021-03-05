@@ -82,6 +82,7 @@ ament_export_dependencies(
 add_library(libknowledge
         src/core/knowledge.cpp
         src/core/field.cpp
+        src/core/drawer.cpp
         )
 ament_target_dependencies(libknowledge rclcpp pack_msgs)
 target_link_libraries(libknowledge ${QT5_LIBRARIES} libgeom)
