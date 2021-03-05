@@ -5,6 +5,9 @@
 #ifndef PACK_AI_EXTERN_VARIABLES_H
 #define PACK_AI_EXTERN_VARIABLES_H
 
+#include "pack_msgs/msg/world_model.hpp"
+
+extern pack_msgs::msg::WorldModel::SharedPtr extern_wm;
 extern double extern_temp_value1;
 extern double extern_temp_value2;
 

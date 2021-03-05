@@ -4,13 +4,12 @@
 
 #include "pack_ai/ai/ai_node.h"
 
+pack_msgs::msg::WorldModel::SharedPtr extern_wm;
 double extern_temp_value1 = 0;
 double extern_temp_value2 = 0;
 
 AINode::AINode(const rclcpp::NodeOptions & options) : Node("ai_node", options)
 {
-    RCLCPP_INFO(this->get_logger(), "ai node started again");
-
     // set up parameter client
     auto parameters_client = std::make_shared<rclcpp::SyncParametersClient>(this);
     while (!parameters_client->wait_for_service(1s)) {
@@ -29,11 +28,21 @@ AINode::AINode(const rclcpp::NodeOptions & options) : Node("ai_node", options)
     extern_temp_value1 = parameters_client->get_parameter("temp_value1", extern_temp_value1);
     extern_temp_value2 = parameters_client->get_parameter("temp_value2", extern_temp_value2);
 
+    // set up world_model callback
+    worldmodel_subscription = this->create_subscription<pack_msgs::msg::WorldModel>("/world_model", 10, std::bind(&AINode::worldmodel_callback, this, _1));
+
+
 }
 
 AINode::~AINode()
 {
 
+}
+
+void AINode::worldmodel_callback(const pack_msgs::msg::WorldModel::SharedPtr msg)
+{
+    extern_wm = msg;
+    qDebug() << extern_wm->ball.pos.x;
 }
 
 void AINode::define_params_change_callback_lambda_function()

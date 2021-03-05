@@ -13,6 +13,7 @@
 #include <QDebug>
 
 #include "pack_ai/ai/extern_variables.h"
+#include "pack_msgs/msg/world_model.hpp"
 
 #include "rclcpp/rclcpp.hpp"
 
@@ -30,6 +31,10 @@ private:
     std::function<void(const rcl_interfaces::msg::ParameterEvent::SharedPtr)> params_change_callback;
     rclcpp::Subscription<rcl_interfaces::msg::ParameterEvent>::SharedPtr parameter_event_sub;
     void define_params_change_callback_lambda_function();
+
+    // world model subscription
+    void worldmodel_callback(const pack_msgs::msg::WorldModel::SharedPtr msg);
+    rclcpp::Subscription<pack_msgs::msg::WorldModel>::SharedPtr worldmodel_subscription;
 
 
 };
