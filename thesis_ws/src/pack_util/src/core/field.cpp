@@ -5,16 +5,16 @@
 
 CField::CField() {
 
-    _FIELD_WIDTH             = 12.0;
-    _FIELD_HEIGHT            = 9.00;
+    _FIELD_WIDTH             = 9.00;
+    _FIELD_HEIGHT            = 6.00;
     _FIELD_MARGIN_HEIGHT     = 0.300;
     _FIELD_MARGIN_WIDTH      = 0.300;
-    _FIELD_PENALTY_POINT     = 1.200;
-    _GOAL_WIDTH              = 1.200;
+    _FIELD_PENALTY_POINT     = 1.00;
+    _GOAL_WIDTH              = 1.00;
     _GOAL_DEPTH              = 0.200;
-    _PENALTY_DEPTH           = 1.200;
-    _PENALTY_WIDTH           = 2.400;
-    _CENTER_CIRCLE_RAD       = 0.600;
+    _PENALTY_DEPTH           = 1.00;
+    _PENALTY_WIDTH           = 2.00;
+    _CENTER_CIRCLE_RAD       = 0.500;
 
     _BOUNDARY_WIDTH          = 0.250;
     _LINE_THICKNESS          = 0.010;

@@ -25,8 +25,8 @@ public:
     double _CENTER_CIRCLE_RAD;
     double _MAX_DIST;
 
-    double _BOUNDARY_WIDTH = 250.0;
-    double _LINE_THICKNESS = 10.0;
+    double _BOUNDARY_WIDTH;
+    double _LINE_THICKNESS;
 
 
     enum class Region {
