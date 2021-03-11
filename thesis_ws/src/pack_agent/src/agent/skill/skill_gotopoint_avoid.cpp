@@ -31,16 +31,31 @@ pack_msgs::msg::RobotCommand SkillGotoPointAvoid::execute(const pack_msgs::msg::
 
     // repulsion force
     // store all obstacles
-    std::vector<pack_msgs::msg::Robot> obstacles;
+    std::vector<Obstacle> obstacles;
     if (skill_gotopointavoid_msg.consider_ball_as_obstacle)
-        obstacles.push_back(extern_wm->ball);
+        obstacles.emplace_back(extern_wm->ball);
     if (skill_gotopointavoid_msg.consider_our_robot_as_obstacle)
         for(const auto& bot: extern_wm->our)
             if (bot.id != robot.id)
-                obstacles.push_back(bot);
+                obstacles.emplace_back(bot);
     if (skill_gotopointavoid_msg.consider_opp_robot_as_obstacle)
         for(const auto& bot: extern_wm->opp)
-            obstacles.push_back(bot);
+            obstacles.emplace_back(bot);
+    if (skill_gotopointavoid_msg.consider_our_penalty_as_obstacle)
+    {
+        Obstacle tmp;
+        tmp.obj.pos = field.ourGoal().toParsianMessage();
+        tmp.repulsion_static_radius = field._PENALTY_DEPTH;
+        obstacles.emplace_back(tmp);
+    }
+    if (skill_gotopointavoid_msg.consider_opp_penalty_as_obstacle)
+    {
+        Obstacle tmp;
+        tmp.obj.pos = field.oppGoal().toParsianMessage();
+        tmp.repulsion_static_radius = field._PENALTY_DEPTH;
+        obstacles.emplace_back(tmp);
+    }
+
 
     // calculate repulsion
     rcsc::Vector2D repulsion{0, 0};
@@ -48,16 +63,19 @@ pack_msgs::msg::RobotCommand SkillGotoPointAvoid::execute(const pack_msgs::msg::
     {
         //repulsion += control_tool::calculate_repulsion_classic(robot, extern_wm->ball.pos, extern_repulsion_radius, extern_repulsion_step, 0.4);
         //repulsion += control_tool::calculate_repulsion_GNRON(robot, extern_wm->ball.pos, skill_gotopointavoid_msg.destination, extern_repulsion_static_radius, extern_repulsion_static_step, 0.4, 10);
-        repulsion += control_tool::calculate_repulsion_dynamic(robot, obs, skill_gotopointavoid_msg.destination,
-                                                               extern_repulsion_static_radius,
-                                                               extern_repulsion_static_step,
-                                                               extern_repulsion_static_prediction,
-                                                               extern_repulsion_dynamic_step,
-                                                               extern_repulsion_dynamic_prediction, 10);
+        repulsion += control_tool::calculate_repulsion_dynamic(robot, obs.obj,
+                                                    skill_gotopointavoid_msg.destination,
+                                                               obs.repulsion_static_radius,
+                                                               obs.repulsion_static_step,
+                                                               obs.repulsion_static_prediction,
+                                                               obs.repulsion_dynamic_step,
+                                                               obs.repulsion_dynamic_prediction,
+                                                               obs.GNRON_degree);
         //draw
         extern_drawer->choose_pen("red", true);
-        extern_drawer->draw_radial_gradient(obs.pos, extern_repulsion_static_radius);
+        extern_drawer->draw_radial_gradient(obs.obj.pos, obs.repulsion_static_radius);
     }
+
 
     // final force calculation
     rcsc::Vector2D final_force = attraction + repulsion;

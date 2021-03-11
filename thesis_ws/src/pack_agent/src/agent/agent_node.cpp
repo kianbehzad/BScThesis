@@ -101,8 +101,7 @@ void AgentNode::worldmodel_callback(const pack_msgs::msg::WorldModel::SharedPtr 
             if (bot.id == skill_msg->id)
             {   robot = bot; found_robot = true; }
         if (!found_robot)
-        {   qDebug() << "[agent_node] robot id out of range (no id=" << skill_msg->id << " found)"; return; }
-
+            return;
 
         switch (skill_msg->skill_type) {
             case pack_msgs::msg::Skill::SKILLGOTOPOINT:
