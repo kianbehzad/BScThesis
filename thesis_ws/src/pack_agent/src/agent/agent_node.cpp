@@ -94,6 +94,16 @@ void AgentNode::worldmodel_callback(const pack_msgs::msg::WorldModel::SharedPtr 
 
     if(skill_msg != nullptr)
     {
+        // find the desierd robot
+        pack_msgs::msg::Robot robot;
+        bool found_robot = false;
+        for (const auto& bot : extern_wm->our)
+            if (bot.id == skill_msg->id)
+            {   robot = bot; found_robot = true; }
+        if (!found_robot)
+        {   qDebug() << "[agent_node] robot id out of range (no id=" << skill_msg->id << " found)"; return; }
+
+
         switch (skill_msg->skill_type) {
             case pack_msgs::msg::Skill::SKILLGOTOPOINT:
                 skill = skill_gotopoint;
@@ -111,7 +121,7 @@ void AgentNode::worldmodel_callback(const pack_msgs::msg::WorldModel::SharedPtr 
                 skill = skill_none;
             break;
         }
-        robotcommand_publisher->publish(skill->execute(*skill_msg));
+        robotcommand_publisher->publish(skill->execute(robot, *skill_msg));
     }
 
     debugdraws_publisher->publish(extern_drawer->get_draws());

@@ -14,10 +14,9 @@ class SkillNone : public Skill
 public:
     SkillNone();
     ~SkillNone();
-    pack_msgs::msg::RobotCommand execute(const pack_msgs::msg::Skill& skill);
+    pack_msgs::msg::RobotCommand execute(const pack_msgs::msg::Robot& robot, const pack_msgs::msg::Skill& skill);
 
 private:
-    int id;
 
 };
 #endif //PACK_AGENT_SKILL_NONE_H

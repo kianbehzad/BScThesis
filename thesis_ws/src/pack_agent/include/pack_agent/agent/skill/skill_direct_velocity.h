@@ -18,11 +18,10 @@ class SkillDirectVelocity : public Skill
 public:
     SkillDirectVelocity();
     ~SkillDirectVelocity();
-    pack_msgs::msg::RobotCommand execute(const pack_msgs::msg::Skill& skill);
+    pack_msgs::msg::RobotCommand execute(const pack_msgs::msg::Robot& robot, const pack_msgs::msg::Skill& skill);
 
 private:
     pack_msgs::msg::SkillDirectVelocity skill_direct_velocity_msg;
-    int id;
     PID* angle_pid;
 
 };

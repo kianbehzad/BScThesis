@@ -14,7 +14,7 @@ class Skill
 public:
     Skill();
     ~Skill();
-    virtual pack_msgs::msg::RobotCommand execute(const pack_msgs::msg::Skill& skill) = 0;
+    virtual pack_msgs::msg::RobotCommand execute(const pack_msgs::msg::Robot& robot, const pack_msgs::msg::Skill& skill) = 0;
 
 
 private:

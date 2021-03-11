@@ -11,11 +11,10 @@ SkillNone::SkillNone() : Skill()
 
 SkillNone::~SkillNone() = default;
 
-pack_msgs::msg::RobotCommand SkillNone::execute(const pack_msgs::msg::Skill& skill)
+pack_msgs::msg::RobotCommand SkillNone::execute(const pack_msgs::msg::Robot& robot, const pack_msgs::msg::Skill& skill)
 {
-    id = skill.id;
     pack_msgs::msg::RobotCommand robot_command;
-    robot_command.robot_id = id;
+    robot_command.robot_id = robot.id;
 
     return robot_command;
 

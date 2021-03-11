@@ -15,22 +15,12 @@ SkillGotoPointAvoid::~SkillGotoPointAvoid()
     delete angle_pid; angle_pid = nullptr;
 }
 
-pack_msgs::msg::RobotCommand SkillGotoPointAvoid::execute(const pack_msgs::msg::Skill& skill)
+pack_msgs::msg::RobotCommand SkillGotoPointAvoid::execute(const pack_msgs::msg::Robot& robot, const pack_msgs::msg::Skill& skill)
 {
     // initial assignments
     skill_gotopointavoid_msg = skill.skill_gotopoint_avoid;
-    id = skill.id;
     pack_msgs::msg::RobotCommand robot_command;
-    robot_command.robot_id = id;
-
-    // find the desierd robot
-    pack_msgs::msg::Robot robot;
-    bool found_robot = false;
-    for (const auto& bot : extern_wm->our)
-        if (bot.id == id)
-        {   robot = bot; found_robot = true; }
-    if (!found_robot)
-    {   qDebug() << "[agent_node] robot id out of range (no id=" << id << " found)"; return robot_command; }
+    robot_command.robot_id = robot.id;
 
 
     // attraction force

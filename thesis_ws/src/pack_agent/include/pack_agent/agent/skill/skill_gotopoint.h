@@ -18,11 +18,10 @@ class SkillGotoPoint : public Skill
 public:
     SkillGotoPoint();
     ~SkillGotoPoint();
-    pack_msgs::msg::RobotCommand execute(const pack_msgs::msg::Skill& skill);
+    pack_msgs::msg::RobotCommand execute(const pack_msgs::msg::Robot& robot, const pack_msgs::msg::Skill& skill);
 
 private:
     pack_msgs::msg::SkillGotoPoint skill_gotopoint_msg;
-    int id;
     PID* pos_pid;
     PID* angle_pid;
 

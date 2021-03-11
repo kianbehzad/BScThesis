@@ -16,22 +16,12 @@ SkillGotoPoint::~SkillGotoPoint()
     delete angle_pid; angle_pid = nullptr;
 }
 
-pack_msgs::msg::RobotCommand SkillGotoPoint::execute(const pack_msgs::msg::Skill& skill)
+pack_msgs::msg::RobotCommand SkillGotoPoint::execute(const pack_msgs::msg::Robot& robot, const pack_msgs::msg::Skill& skill)
 {
     // initial assignments
     skill_gotopoint_msg = skill.skill_gotopoint;
-    id = skill.id;
     pack_msgs::msg::RobotCommand robot_command;
-    robot_command.robot_id = id;
-
-    // find the desierd robot
-    pack_msgs::msg::Robot robot;
-    bool found_robot = false;
-    for (const auto& bot : extern_wm->our)
-        if (bot.id == id)
-        {   robot = bot; found_robot = true; }
-    if (!found_robot)
-    {   qDebug() << "[agent_node] robot id out of range (no id=" << id << " found)"; return robot_command; }
+    robot_command.robot_id = robot.id;
 
     // position PID controller
     pos_pid->set_p(extern_P_pos);

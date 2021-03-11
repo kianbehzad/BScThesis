@@ -19,12 +19,11 @@ class SkillGotoPointAvoid : public Skill
 public:
     SkillGotoPointAvoid();
     ~SkillGotoPointAvoid();
-    pack_msgs::msg::RobotCommand execute(const pack_msgs::msg::Skill& skill);
+    pack_msgs::msg::RobotCommand execute(const pack_msgs::msg::Robot& robot, const pack_msgs::msg::Skill& skill);
 
 
 private:
     pack_msgs::msg::SkillGotoPointAvoid skill_gotopointavoid_msg;
-    int id;
     PID* angle_pid;
     int local_minimum_counter;
 
