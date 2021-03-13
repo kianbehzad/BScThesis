@@ -53,9 +53,8 @@ void AINode::worldmodel_callback(const pack_msgs::msg::WorldModel::SharedPtr msg
 {
     extern_wm = msg;
 
-    extern_skill_handler->direct_velocity(3, rcsc::Vector2D{1, 0});
-    extern_skill_handler->gotopoint(0, rcsc::Vector2D{0, 0}, rcsc::Vector2D{4.5, 0});
-    extern_skill_handler->gotopoint_avoid(1, rcsc::Vector2D{4, 0}, rcsc::Vector2D{}.invalidate(), true);
+    // execute the coach
+    coach.execute();
 
     // publish all assigned skills
     for(const auto& skill : extern_skill_handler->get_skills())

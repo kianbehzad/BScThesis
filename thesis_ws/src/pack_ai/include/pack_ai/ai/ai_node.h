@@ -14,6 +14,7 @@
 #include <QString>
 
 #include "pack_ai/ai/extern_variables.h"
+#include "pack_ai/ai/coach.h"
 #include "pack_util/core/drawer.h"
 #include "pack_util/core/skill_handler.h"
 #include "pack_util/core/knowledge.h"
@@ -32,6 +33,8 @@ public:
     ~AINode();
 
 private:
+    Coach coach;
+
     // parameter client
     std::function<void(const rcl_interfaces::msg::ParameterEvent::SharedPtr)> params_change_callback;
     rclcpp::Subscription<rcl_interfaces::msg::ParameterEvent>::SharedPtr parameter_event_sub;
