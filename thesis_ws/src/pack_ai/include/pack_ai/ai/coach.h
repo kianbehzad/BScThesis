@@ -8,6 +8,7 @@
 #include "pack_util/core/field.h"
 #include "pack_util/core/knowledge.h"
 #include "pack_util/geom/segment_2d.h"
+#include "pack_util/geom/rect_2d.h"
 #include "pack_ai/ai/extern_variables.h"
 
 #include <QDebug>
@@ -27,6 +28,9 @@ private:
 
     // push ball to a destination
     void push_ball(const int& id, const rcsc::Vector2D& destination);
+
+    // defense at penalty area
+    void defense_at_penalty(const int& id);
 };
 
 #endif //PACK_AI_COACH_H

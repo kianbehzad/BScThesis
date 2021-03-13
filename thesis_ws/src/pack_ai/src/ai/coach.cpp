@@ -10,7 +10,11 @@ Coach::~Coach() = default;
 
 void Coach::execute()
 {
-    push_ball(0, field.oppGoal());
+//    push_ball(0, field.oppGoal());
+    defense_at_penalty(0);
+
+
+
 }
 
 int Coach::ID(int id)
@@ -35,4 +39,25 @@ void Coach::push_ball(const int& id, const rcsc::Vector2D& destination)
     else
         extern_skill_handler->gotopoint(id, position, destination);
 }
+
+void Coach::defense_at_penalty(const int& id)
+{
+    rcsc::Vector2D ball_vel = extern_wm->ball.vel;
+    rcsc::Vector2D ball_pos = extern_wm->ball.pos + ball_vel*0.1;
+    rcsc::Segment2D ball_path{ball_pos, ball_pos+ball_vel*10};
+    rcsc::Segment2D right_penalty_area_seg{field.ourPenaltyRect().topRight(), field.ourPenaltyRect().bottomRight()};
+    rcsc::Rect2D left_of_penalty_rect{field.ourCornerL(), field.ourPenaltyRect().topRight()};
+    rcsc::Rect2D right_of_penalty_rect{field.ourCornerR(), field.ourPenaltyRect().bottomRight()};
+
+    rcsc::Vector2D position;
+    QList<rcsc::Vector2D> sols = field.ourPAreaIntersect(ball_path);
+    if (sols.empty())
+        if (left_of_penalty_rect.contains(ball_pos)) position = rcsc::Vector2D{ball_pos.x, field.ourPenaltyRect().top()};
+        else if (right_of_penalty_rect.contains(ball_pos)) position = rcsc::Vector2D{ball_pos.x, field.ourPenaltyRect().bottom()};
+        else position = right_penalty_area_seg.nearestPoint(ball_pos);
+    else if (sols.size() == 1) position = sols[0];
+    else position = (ball_pos.dist(sols[0]) > ball_pos.dist(sols[1])) ? sols[1] : sols[0];
+    extern_skill_handler->gotopoint_avoid(id, position, ball_pos, false, true, false, true, false);
+}
+
 
