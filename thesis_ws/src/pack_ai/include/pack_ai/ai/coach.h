@@ -7,6 +7,8 @@
 
 #include "pack_ai/ai/extern_variables.h"
 
+#include <QDebug>
+
 class Coach
 {
 public:
@@ -15,7 +17,8 @@ public:
     void execute();
 
 private:
-
+    // gets the desired id and returns the index corresponding to the id in wm.our
+    int ID(int id);
 };
 
 #endif //PACK_AI_COACH_H
