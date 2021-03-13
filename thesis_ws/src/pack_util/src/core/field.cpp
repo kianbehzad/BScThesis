@@ -260,7 +260,8 @@ QList<Vector2D> CField::ourPAreaIntersect(Segment2D segment) const {
     fOurPenaltyRect.intersection(segment, &v[0], &v[1]);
     QList<Vector2D> results;
     for (const auto& vec : v) {
-        results.append(vec);
+        if (vec.isValid())
+            results.append(vec);
     }
     return results;
 }
