@@ -31,6 +31,13 @@ private:
 
     // defense at penalty area
     void defense_at_penalty(const int& id);
+
+    // follow a set of waypoints continuously
+    void follow_waypoints(const int& id, const QList<rcsc::Vector2D>& waypoints);
+    int waypoints_state;
+
+
+
 };
 
 #endif //PACK_AI_COACH_H

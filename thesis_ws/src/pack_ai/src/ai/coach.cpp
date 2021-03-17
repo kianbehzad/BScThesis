@@ -4,15 +4,24 @@
 
 #include "pack_ai/ai/coach.h"
 
-Coach::Coach() = default;
+Coach::Coach()
+{
+    waypoints_state = 0;
+}
 
 Coach::~Coach() = default;
 
 void Coach::execute()
 {
 //    push_ball(0, field.oppGoal());
-    defense_at_penalty(0);
+//    defense_at_penalty(0);
 
+    QList<rcsc::Vector2D> positions;
+    positions << rcsc::Vector2D{2, 2};
+    positions << rcsc::Vector2D{-2, 2};
+    positions << rcsc::Vector2D{-2, -2};
+    positions << rcsc::Vector2D{2, -2};
+    follow_waypoints(0, positions);
 
 
 }
@@ -58,6 +67,22 @@ void Coach::defense_at_penalty(const int& id)
     else if (sols.size() == 1) position = sols[0];
     else position = (ball_pos.dist(sols[0]) > ball_pos.dist(sols[1])) ? sols[1] : sols[0];
     extern_skill_handler->gotopoint_avoid(id, position, ball_pos, false, true, false, true, false);
+}
+
+void Coach::follow_waypoints(const int& id, const QList<rcsc::Vector2D>& waypoints)
+{
+    int& state = waypoints_state;
+    rcsc::Vector2D robot_pos = extern_wm->our[ID(id)].pos;
+
+    double arrived_dist = 0.04;
+    for (int i{}; i<waypoints.size()-1; i++)
+        if (state == i && robot_pos.dist(waypoints[state]) < arrived_dist)
+            state++;
+    if (state == waypoints.size()-1 && robot_pos.dist(waypoints[state]) < arrived_dist)
+        state = 0;
+
+    extern_skill_handler->gotopoint_avoid(id, waypoints[state], waypoints[state]);
+
 }
 
 
