@@ -42,6 +42,7 @@ add_executable(ai
         src/ai/ai_exec.cpp
         src/ai/ai_node.cpp
         src/ai/coach.cpp
+        src/ai/tools/graph.cpp
         )
 ament_target_dependencies(ai rclcpp pack_msgs pack_util)
 target_link_libraries(ai ${QT5_LIBRARIES})
