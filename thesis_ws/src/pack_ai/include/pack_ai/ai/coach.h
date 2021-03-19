@@ -10,6 +10,7 @@
 #include "pack_util/geom/segment_2d.h"
 #include "pack_util/geom/rect_2d.h"
 #include "pack_ai/ai/extern_variables.h"
+#include "pack_ai/ai/tools/graph.h"
 
 #include <QDebug>
 

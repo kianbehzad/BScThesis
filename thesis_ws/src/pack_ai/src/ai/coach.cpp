@@ -7,6 +7,35 @@
 Coach::Coach()
 {
     waypoints_state = 0;
+
+    Graph gr{};
+    gr.add_vertex(rcsc::Vector2D{0, 0});
+    gr.add_vertex(rcsc::Vector2D{-0.5, -0.5});
+    gr.add_vertex(rcsc::Vector2D{-0.5, 0.5});
+    gr.add_vertex(rcsc::Vector2D{-0.5, 0.5});
+    gr.add_vertex();
+
+    gr.add_edge(1, 2);
+    gr.add_edge(1, 3);
+    gr.add_edge(1, 3);
+    gr.add_edge(2, 3);
+    gr.add_edge(2, 2);
+    gr.add_edge(2, 4);
+
+    qDebug() << gr.vertices_num();
+    for (const auto& edge: gr.get_edges())
+        qDebug() << edge.first << " - " << edge.second;
+
+    qDebug() << "";
+    for (const auto& n : gr.get_neighbors(2))
+        qDebug() << n;
+
+    qDebug() << "";
+    double dist;
+    gr.get_dist(1, 2, dist);
+    qDebug() << dist;
+
+
 }
 
 Coach::~Coach() = default;
@@ -14,15 +43,15 @@ Coach::~Coach() = default;
 void Coach::execute()
 {
 //    push_ball(0, field.oppGoal());
+
 //    defense_at_penalty(0);
 
-    QList<rcsc::Vector2D> positions;
-    positions << rcsc::Vector2D{2, 2};
-    positions << rcsc::Vector2D{-2, 2};
-    positions << rcsc::Vector2D{-2, -2};
-    positions << rcsc::Vector2D{2, -2};
-    follow_waypoints(0, positions);
-
+//    QList<rcsc::Vector2D> positions;
+//    positions << rcsc::Vector2D{2, 2};
+//    positions << rcsc::Vector2D{-2, 2};
+//    positions << rcsc::Vector2D{-2, -2};
+//    positions << rcsc::Vector2D{2, -2};
+//    follow_waypoints(0, positions);
 
 }
 

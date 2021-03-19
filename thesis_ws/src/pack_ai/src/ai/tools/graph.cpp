@@ -91,3 +91,34 @@ void Graph::remove_repeated_edges()
 {
     edges.erase( unique( edges.begin(), edges.end() ), edges.end() );
 }
+
+bool Graph::are_neighbors(const unsigned int& vertex1, const unsigned int& vertex2)
+{
+    for (const auto& edge : edges)
+        if (edge.first == vertex1 && edge.second == vertex2)
+            return true;
+        else if (edge.second == vertex1 && edge.first == vertex2)
+            return true;
+
+    return false;
+}
+
+std::vector<unsigned int> Graph::get_neighbors(const unsigned int& vertex_number)
+{
+    std::vector<unsigned int> neighbors;
+
+    for (int i{}; i < vertices.size(); i++)
+        if (are_neighbors(vertex_number, i))
+            neighbors.push_back(i);
+
+    return neighbors;
+}
+
+bool Graph::get_dist(const unsigned int& vertex1, const unsigned int& vertex2, double& dist)
+{
+    if (vertex1 > vertices_num() || vertex2 > vertices_num())
+        return false;
+    dist = vertices[vertex1].dist(vertices[vertex2]);
+
+    return are_neighbors(vertex1, vertex2);
+}
