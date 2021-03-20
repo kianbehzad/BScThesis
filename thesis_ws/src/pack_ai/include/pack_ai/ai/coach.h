@@ -25,7 +25,7 @@ private:
     CField field;
 
     // gets the desired id and returns the index corresponding to the id in wm.our
-    int ID(int id);
+    static int ID(int id);
 
     // push ball to a destination
     void push_ball(const int& id, const rcsc::Vector2D& destination);
@@ -38,8 +38,8 @@ private:
     int waypoints_state;
 
     // formation control
+    void formation_acquisition(const std::vector<int>& robot_ids, const Graph& formation, const double& step);
     Graph formation_gr1;
-    std::vector<int> robot_ids;
 
 };
 

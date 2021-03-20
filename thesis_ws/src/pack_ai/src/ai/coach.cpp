@@ -19,28 +19,38 @@ Coach::Coach()
     formation_gr1.add_edge(1, 2);
     formation_gr1.add_edge(1, 3);
     formation_gr1.add_edge(2, 3);
-
-    for (int i{}; i < formation_gr1.vertices_num(); i++)
-        robot_ids.push_back(i);
 }
 
 Coach::~Coach() = default;
 
 void Coach::execute()
 {
-    double kv = extern_formation_acquisition_step;
+    formation_acquisition({0, 1, 2, 3}, formation_gr1, extern_formation_acquisition_step);
+}
 
+void Coach::formation_acquisition(const std::vector<int>& robot_ids, const Graph& formation, const double& step)
+{
+    if (formation.vertices_num() != robot_ids.size())
+    {
+        qDebug() << "[ai_node] attempt to acquire a formation with different number of vertices and robots!";
+        return;
+    }
+
+    int size = static_cast<int>(formation.vertices_num());
     std::vector<rcsc::Vector2D> robot_vels;
-    robot_vels.resize(formation_gr1.vertices_num(), rcsc::Vector2D{0, 0});
+    robot_vels.resize(size, rcsc::Vector2D{0, 0});
 
-    for (int i{}; i < formation_gr1.vertices_num(); i++)
-        for (int j{}; j < formation_gr1.vertices_num(); j++)
-            if (formation_gr1.are_neighbors(i, j))
+    // calculate robots' velocities
+    for (int i{}; i < size; i++)
+        for (int j{}; j < size; j++)
+            if (formation.are_neighbors(i, j))
             {
                 rcsc::Vector2D qtilda = extern_wm->our[ID(robot_ids[i])].pos - extern_wm->our[ID(robot_ids[j])].pos;
-                robot_vels[i] += -kv * qtilda*(qtilda.length()*qtilda.length() - formation_gr1.get_dist(i, j)*formation_gr1.get_dist(i, j));
+                robot_vels[i] += -step * qtilda*(qtilda.length()*qtilda.length() - formation.get_dist(i, j)*formation.get_dist(i, j));
             }
-    for (int i{}; i < formation_gr1.vertices_num(); i++)
+
+    // send velocities for robots
+    for (int i{}; i < size; i++)
         extern_skill_handler->direct_velocity(robot_ids[i], robot_vels[i]);
 }
 
@@ -102,5 +112,6 @@ void Coach::follow_waypoints(const int& id, const QList<rcsc::Vector2D>& waypoin
     extern_skill_handler->gotopoint_avoid(id, waypoints[state], waypoints[state]);
 
 }
+
 
 
