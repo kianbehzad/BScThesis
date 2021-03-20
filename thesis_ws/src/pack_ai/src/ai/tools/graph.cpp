@@ -47,12 +47,12 @@ unsigned int Graph::vertices_num() const
     return vertices.size();
 }
 
-std::vector<Edge> Graph::get_edges()
+std::vector<Edge> Graph::get_edges() const
 {
     return edges;
 }
 
-std::vector<rcsc::Vector2D> Graph::get_vertices()
+std::vector<rcsc::Vector2D> Graph::get_vertices() const
 {
     return vertices;
 }
@@ -92,7 +92,7 @@ void Graph::remove_repeated_edges()
     edges.erase( unique( edges.begin(), edges.end() ), edges.end() );
 }
 
-bool Graph::are_neighbors(const unsigned int& vertex1, const unsigned int& vertex2)
+bool Graph::are_neighbors(const unsigned int& vertex1, const unsigned int& vertex2) const
 {
     for (const auto& edge : edges)
         if (edge.first == vertex1 && edge.second == vertex2)
@@ -103,25 +103,25 @@ bool Graph::are_neighbors(const unsigned int& vertex1, const unsigned int& verte
     return false;
 }
 
-std::vector<unsigned int> Graph::get_neighbors(const unsigned int& vertex_number)
+std::vector<unsigned int> Graph::get_neighbors(const unsigned int& vertex_number) const
 {
     std::vector<unsigned int> neighbors;
 
-    for (int i{}; i < vertices.size(); i++)
+    for (int i{}; i < static_cast<int>(vertices.size()); i++)
         if (are_neighbors(vertex_number, i))
             neighbors.push_back(i);
 
     return neighbors;
 }
 
-double Graph::get_dist(const unsigned int& vertex1, const unsigned int& vertex2)
+double Graph::get_dist(const unsigned int& vertex1, const unsigned int& vertex2) const
 {
     if (vertex1 > vertices_num() || vertex2 > vertices_num())
         return 0;
     return vertices[vertex1].dist(vertices[vertex2]);
 }
 
-bool Graph::get_dist(const unsigned int& vertex1, const unsigned int& vertex2, double& dist)
+bool Graph::get_dist(const unsigned int& vertex1, const unsigned int& vertex2, double& dist) const
 {
     dist = get_dist(vertex1, vertex2);
     return are_neighbors(vertex1, vertex2);

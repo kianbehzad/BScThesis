@@ -42,10 +42,10 @@ public:
     unsigned int vertices_num() const;
 
     // returns all the edges of this graph
-    std::vector<Edge> get_edges();
+    std::vector<Edge> get_edges() const;
 
     // returns all the vertices' positions of this graph
-    std::vector<rcsc::Vector2D> get_vertices();
+    std::vector<rcsc::Vector2D> get_vertices() const;
 
     // add a single vertex to the graph
     // (if the position is not important invalidate vector2d could be used)
@@ -64,18 +64,18 @@ public:
     bool add_edge(const unsigned int& first_vertex, const unsigned int& second_vertex);
 
     // specifies if two vertices are connected with an edge or not
-    bool are_neighbors(const unsigned int& vertex1, const unsigned int& vertex2);
+    bool are_neighbors(const unsigned int& vertex1, const unsigned int& vertex2) const;
 
     // get the id number of vertices connected by an edge to an specified vertex(i.e. vertex_number)
-    std::vector<unsigned int> get_neighbors(const unsigned int& vertex_number);
+    std::vector<unsigned int> get_neighbors(const unsigned int& vertex_number) const;
 
 
     // calculates the distance between to vertices(according to their positions) and returns it
-    double get_dist(const unsigned int& vertex1, const unsigned int& vertex2);
+    double get_dist(const unsigned int& vertex1, const unsigned int& vertex2) const;
 
     // calculates the distance between to vertices(according to their positions) and stores it in dist input
     // if there are no edges connecting the vertices returns false
-    bool get_dist(const unsigned int& vertex1, const unsigned int& vertex2, double& dist);
+    bool get_dist(const unsigned int& vertex1, const unsigned int& vertex2, double& dist) const;
 
 
 
