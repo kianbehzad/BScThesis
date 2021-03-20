@@ -7,6 +7,7 @@
 pack_msgs::msg::WorldModel::SharedPtr extern_wm;
 Drawer* extern_drawer;
 SkillHandler* extern_skill_handler;
+pack_msgs::msg::SandBox* extern_sandbox_msg;
 double extern_formation_acquisition_step = 4.6;
 double extern_temp_value1 = 0;
 double extern_temp_value2 = 0;
@@ -43,6 +44,10 @@ AINode::AINode(const rclcpp::NodeOptions & options) : Node("ai_node", options)
     extern_skill_handler = new SkillHandler{};
     for (int i = 0; i < knowledge::MAX_ROBOT_NUM; i++)
         skill_publisher[i] = this->create_publisher<pack_msgs::msg::Skill>("/agent_"+QString::number(i).toStdString()+"/skill", 5);
+
+    // set up sandbox publisher
+    extern_sandbox_msg = new pack_msgs::msg::SandBox;
+    sandbox_publisher = this->create_publisher<pack_msgs::msg::SandBox>("/sandbox", 5);
 }
 
 AINode::~AINode()
@@ -63,6 +68,9 @@ void AINode::worldmodel_callback(const pack_msgs::msg::WorldModel::SharedPtr msg
         skill_publisher[skill.id]->publish(skill);
     // publish all draws
     debugdraws_publisher->publish(extern_drawer->get_draws());
+    // publish sandbox datas
+    qDebug() << extern_sandbox_msg->data1;
+    sandbox_publisher->publish(*extern_sandbox_msg);
 }
 
 void AINode::define_params_change_callback_lambda_function()

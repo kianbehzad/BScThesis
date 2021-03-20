@@ -26,6 +26,7 @@ Coach::~Coach() = default;
 void Coach::execute()
 {
     formation_acquisition({0, 1, 2, 3}, formation_gr1, extern_formation_acquisition_step);
+    extern_sandbox_msg->data1 = extern_wm->our[ID(0)].pos.x;
 }
 
 void Coach::formation_acquisition(const std::vector<int>& robot_ids, const Graph& formation, const double& step)

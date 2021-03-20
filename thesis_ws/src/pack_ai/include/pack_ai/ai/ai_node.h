@@ -20,6 +20,7 @@
 #include "pack_util/core/knowledge.h"
 #include "pack_msgs/msg/world_model.hpp"
 #include "pack_msgs/msg/skill.hpp"
+#include "pack_msgs/msg/sand_box.hpp"
 
 #include "rclcpp/rclcpp.hpp"
 
@@ -49,6 +50,9 @@ private:
 
     // skill publisher
     rclcpp::Publisher<pack_msgs::msg::Skill>::SharedPtr skill_publisher[knowledge::MAX_ROBOT_NUM];
+
+    // sandbox publisher
+    rclcpp::Publisher<pack_msgs::msg::SandBox>::SharedPtr sandbox_publisher;
 
 
 };
