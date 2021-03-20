@@ -23,7 +23,9 @@ pack_msgs::msg::RobotCommand SkillDirectVelocity::execute(const pack_msgs::msg::
 
     // calculate robot vels to attain the desired velocity
     double velf, veln;
-    control_tool::calculate_robot_linear_vels(skill_direct_velocity_msg.velocity, robot.dir, velf, veln);
+    rcsc::Vector2D velocity = skill_direct_velocity_msg.velocity;
+    if (velocity.length() > extern_max_vel) velocity.setLength(extern_max_vel);
+    control_tool::calculate_robot_linear_vels(velocity, robot.dir, velf, veln);
 
     // angle PID controller
     double output_angle = 0;
