@@ -69,7 +69,6 @@ void AINode::worldmodel_callback(const pack_msgs::msg::WorldModel::SharedPtr msg
     // publish all draws
     debugdraws_publisher->publish(extern_drawer->get_draws());
     // publish sandbox datas
-    qDebug() << extern_sandbox_msg->data1;
     sandbox_publisher->publish(*extern_sandbox_msg);
 }
 
