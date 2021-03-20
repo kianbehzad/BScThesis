@@ -27,9 +27,9 @@ bool Graph::check_graph_validity(const unsigned int& _vertices_num, const std::v
         return false;
     for (const auto& edge : _edges)
     {
-        if (!(edge.first > 0 && edge.first <= _vertices_num))
+        if (!(edge.first >= 0 && edge.first < _vertices_num))
             return false;
-        if (!(edge.second > 0 && edge.second <= _vertices_num))
+        if (!(edge.second >= 0 && edge.second < _vertices_num))
             return false;
         if (edge.first == edge.second)
             return false;
@@ -114,11 +114,15 @@ std::vector<unsigned int> Graph::get_neighbors(const unsigned int& vertex_number
     return neighbors;
 }
 
-bool Graph::get_dist(const unsigned int& vertex1, const unsigned int& vertex2, double& dist)
+double Graph::get_dist(const unsigned int& vertex1, const unsigned int& vertex2)
 {
     if (vertex1 > vertices_num() || vertex2 > vertices_num())
-        return false;
-    dist = vertices[vertex1].dist(vertices[vertex2]);
+        return 0;
+    return vertices[vertex1].dist(vertices[vertex2]);
+}
 
+bool Graph::get_dist(const unsigned int& vertex1, const unsigned int& vertex2, double& dist)
+{
+    dist = get_dist(vertex1, vertex2);
     return are_neighbors(vertex1, vertex2);
 }

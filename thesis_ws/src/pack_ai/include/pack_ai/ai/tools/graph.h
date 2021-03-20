@@ -69,9 +69,14 @@ public:
     // get the id number of vertices connected by an edge to an specified vertex(i.e. vertex_number)
     std::vector<unsigned int> get_neighbors(const unsigned int& vertex_number);
 
+
+    // calculates the distance between to vertices(according to their positions) and returns it
+    double get_dist(const unsigned int& vertex1, const unsigned int& vertex2);
+
     // calculates the distance between to vertices(according to their positions) and stores it in dist input
     // if there are no edges connecting the vertices returns false
     bool get_dist(const unsigned int& vertex1, const unsigned int& vertex2, double& dist);
+
 
 
 
