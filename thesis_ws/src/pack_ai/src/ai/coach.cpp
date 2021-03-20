@@ -8,51 +8,40 @@ Coach::Coach()
 {
     waypoints_state = 0;
 
-    Graph gr{};
-    gr.add_vertex(rcsc::Vector2D{0, 0});
-    gr.add_vertex(rcsc::Vector2D{-0.5, -0.5});
-    gr.add_vertex(rcsc::Vector2D{-0.5, 0.5});
-    gr.add_vertex(rcsc::Vector2D{-0.5, 0.5});
-    gr.add_vertex();
+    // formation control
+    formation_gr1.add_vertex(rcsc::Vector2D{0, 0});
+    formation_gr1.add_vertex(rcsc::Vector2D{-.5, 0});
+    formation_gr1.add_vertex(rcsc::Vector2D{-.5, -.5});
+    formation_gr1.add_vertex(rcsc::Vector2D{0, -.5});
+    formation_gr1.add_edge(0, 1);
+    formation_gr1.add_edge(0, 2);
+    formation_gr1.add_edge(0, 3);
+    formation_gr1.add_edge(1, 2);
+    formation_gr1.add_edge(1, 3);
+    formation_gr1.add_edge(2, 3);
 
-    gr.add_edge(1, 2);
-    gr.add_edge(1, 3);
-    gr.add_edge(1, 3);
-    gr.add_edge(2, 3);
-    gr.add_edge(2, 2);
-    gr.add_edge(2, 4);
-
-    qDebug() << gr.vertices_num();
-    for (const auto& edge: gr.get_edges())
-        qDebug() << edge.first << " - " << edge.second;
-
-    qDebug() << "";
-    for (const auto& n : gr.get_neighbors(2))
-        qDebug() << n;
-
-    qDebug() << "";
-    double dist;
-    gr.get_dist(1, 2, dist);
-    qDebug() << dist;
-
-
+    for (int i{}; i < formation_gr1.vertices_num(); i++)
+        robot_ids.push_back(i);
 }
 
 Coach::~Coach() = default;
 
 void Coach::execute()
 {
-//    push_ball(0, field.oppGoal());
+    double kv = extern_formation_acquisition_step;
 
-//    defense_at_penalty(0);
+    std::vector<rcsc::Vector2D> robot_vels;
+    robot_vels.resize(formation_gr1.vertices_num(), rcsc::Vector2D{0, 0});
 
-//    QList<rcsc::Vector2D> positions;
-//    positions << rcsc::Vector2D{2, 2};
-//    positions << rcsc::Vector2D{-2, 2};
-//    positions << rcsc::Vector2D{-2, -2};
-//    positions << rcsc::Vector2D{2, -2};
-//    follow_waypoints(0, positions);
-
+    for (int i{}; i < formation_gr1.vertices_num(); i++)
+        for (int j{}; j < formation_gr1.vertices_num(); j++)
+            if (formation_gr1.are_neighbors(i, j))
+            {
+                rcsc::Vector2D qtilda = extern_wm->our[ID(robot_ids[i])].pos - extern_wm->our[ID(robot_ids[j])].pos;
+                robot_vels[i] += -kv * qtilda*(qtilda.length()*qtilda.length() - formation_gr1.get_dist(i, j)*formation_gr1.get_dist(i, j));
+            }
+    for (int i{}; i < formation_gr1.vertices_num(); i++)
+        extern_skill_handler->direct_velocity(robot_ids[i], robot_vels[i]);
 }
 
 int Coach::ID(int id)

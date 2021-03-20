@@ -37,7 +37,9 @@ private:
     void follow_waypoints(const int& id, const QList<rcsc::Vector2D>& waypoints);
     int waypoints_state;
 
-
+    // formation control
+    Graph formation_gr1;
+    std::vector<int> robot_ids;
 
 };
 
