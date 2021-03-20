@@ -7,6 +7,7 @@
 pack_msgs::msg::WorldModel::SharedPtr extern_wm;
 Drawer* extern_drawer;
 SkillHandler* extern_skill_handler;
+double extern_formation_acquisition_step = 4.6;
 double extern_temp_value1 = 0;
 double extern_temp_value2 = 0;
 
@@ -27,6 +28,7 @@ AINode::AINode(const rclcpp::NodeOptions & options) : Node("ai_node", options)
     parameter_event_sub = parameters_client->on_parameter_event(params_change_callback);
 
     // get parameter initial values
+    extern_formation_acquisition_step = parameters_client->get_parameter("formation_acquisition_step", extern_formation_acquisition_step);
     extern_temp_value1 = parameters_client->get_parameter("temp_value1", extern_temp_value1);
     extern_temp_value2 = parameters_client->get_parameter("temp_value2", extern_temp_value2);
 
@@ -71,6 +73,11 @@ void AINode::define_params_change_callback_lambda_function()
             //do stuff
         }
         for (auto & changed_parameter : event->changed_parameters) {
+            if(changed_parameter.name == "formation_acquisition_step")
+            {
+                extern_formation_acquisition_step = changed_parameter.value.double_value;
+                if(extern_formation_acquisition_step == 0)  extern_formation_acquisition_step = changed_parameter.value.integer_value;//double_value gives 0 if the input has no decimals
+            }
             if(changed_parameter.name == "temp_value1")
             {
                 extern_temp_value1 = changed_parameter.value.double_value;

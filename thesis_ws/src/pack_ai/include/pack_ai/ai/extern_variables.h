@@ -12,6 +12,7 @@
 extern pack_msgs::msg::WorldModel::SharedPtr extern_wm;
 extern Drawer* extern_drawer;
 extern SkillHandler* extern_skill_handler;
+extern double extern_formation_acquisition_step;
 extern double extern_temp_value1;
 extern double extern_temp_value2;
 
