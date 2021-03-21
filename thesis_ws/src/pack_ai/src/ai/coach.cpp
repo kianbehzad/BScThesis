@@ -10,15 +10,15 @@ Coach::Coach()
 
     // formation control
     formation_gr1.add_vertex(rcsc::Vector2D{0, 0});
-    formation_gr1.add_vertex(rcsc::Vector2D{-.5, 0});
-    formation_gr1.add_vertex(rcsc::Vector2D{-.5, -.5});
-    formation_gr1.add_vertex(rcsc::Vector2D{0, -.5});
+    formation_gr1.add_vertex(rcsc::Vector2D{-.5, 0.25});
+    formation_gr1.add_vertex(rcsc::Vector2D{-.5, -.25});
+//    formation_gr1.add_vertex(rcsc::Vector2D{0, -.5});
     formation_gr1.add_edge(0, 1);
     formation_gr1.add_edge(0, 2);
-    formation_gr1.add_edge(0, 3);
+//    formation_gr1.add_edge(0, 3);
     formation_gr1.add_edge(1, 2);
-    formation_gr1.add_edge(1, 3);
-    formation_gr1.add_edge(2, 3);
+//    formation_gr1.add_edge(1, 3);
+//    formation_gr1.add_edge(2, 3);
 }
 
 Coach::~Coach() = default;
@@ -26,15 +26,19 @@ Coach::~Coach() = default;
 void Coach::execute()
 {
     std::vector<rcsc::Vector2D> vels;
-    std::vector<int> ids{0, 1, 2, 3};
-    double error = formation_acquisition(ids, formation_gr1, extern_formation_acquisition_step, vels);
-    for (int i{}; i < static_cast<int>(ids.size()); i++)
-        extern_skill_handler->direct_velocity(ids[i], vels[i]);
+    std::vector<int> ids{0, 1, 2};
+    rcsc::Vector2D vd = follow_waypoints(ids[0], {{2, -2}, {2, 2}, {-2, 2}, {-2, -2}});
+    double error = formation_maneuvering(ids, formation_gr1, {0, 0}, extern_formation_acquisition_step, vd, 0);
+
+    follow_waypoints_skill(3, {{1, 0}, {-1, 0}});
 }
 
-double Coach::formation_acquisition(const std::vector<int>& robot_ids, const Graph& formation, const double& step, std::vector<rcsc::Vector2D>& vels)
+double Coach::formation_acquisition(const std::vector<int>& robot_ids,
+                                    const Graph& formation,
+                                    const double& step,
+                                    std::vector<rcsc::Vector2D>& vels)
 {
-    if (formation.vertices_num() != robot_ids.size())
+    if (formation.vertices_num() != robot_ids.size() || formation.vertices_num() == 0)
     {
         qDebug() << "[ai_node] attempt to acquire a formation with different number of vertices and robots!";
         return -1;
@@ -54,6 +58,35 @@ double Coach::formation_acquisition(const std::vector<int>& robot_ids, const Gra
                 vels[i] += -step * qtilda*(qtilda.length()*qtilda.length() - d*d);
                 error += fabs(qtilda.length() - d);
             }
+    return error;
+}
+
+double Coach::formation_maneuvering(const std::vector<int>& robot_ids,
+                                    const Graph& formation,
+                                    const rcsc::Vector2D& look_at,
+                                    const double& acquisition_step,
+                                    const rcsc::Vector2D& vel_d,
+                                    const double& w_d) // TODO add w_d functionality
+{
+    // check the size
+    if (formation.vertices_num() != robot_ids.size() || formation.vertices_num() == 0)
+    {
+        qDebug() << "[ai_node] attempt to acquire a formation with different number of vertices and robots!";
+        return -1;
+    }
+    int size = static_cast<int>(formation.vertices_num());
+
+    // formation acquisition
+    std::vector<rcsc::Vector2D> vels(size, {0, 0});
+    double error = formation_acquisition(robot_ids, formation, acquisition_step, vels);
+
+    // formation maneuvering
+    for (int i{}; i<size; i++)
+        vels[i] += vel_d;
+
+    // apply the calculated vels to robots
+    for (int i{}; i<size; i++)
+        extern_skill_handler->direct_velocity(robot_ids[i], vels[i], look_at);
     return error;
 }
 
@@ -100,7 +133,22 @@ void Coach::defense_at_penalty(const int& id)
     extern_skill_handler->gotopoint_avoid(id, position, ball_pos, false, true, false, true, false);
 }
 
-void Coach::follow_waypoints(const int& id, const QList<rcsc::Vector2D>& waypoints)
+void Coach::follow_waypoints_skill(const int& id, const QList<rcsc::Vector2D>& waypoints)
+{
+    int& state = waypoints_state_skill;
+    rcsc::Vector2D robot_pos = extern_wm->our[ID(id)].pos;
+
+    double arrived_dist = 0.04;
+    for (int i{}; i<waypoints.size()-1; i++)
+        if (state == i && robot_pos.dist(waypoints[state]) < arrived_dist)
+            state++;
+    if (state == waypoints.size()-1 && robot_pos.dist(waypoints[state]) < arrived_dist)
+        state = 0;
+
+    extern_skill_handler->gotopoint_avoid(id, waypoints[state], waypoints[state]);
+}
+
+rcsc::Vector2D Coach::follow_waypoints(const int& id, const QList<rcsc::Vector2D>& waypoints)
 {
     int& state = waypoints_state;
     rcsc::Vector2D robot_pos = extern_wm->our[ID(id)].pos;
@@ -112,8 +160,7 @@ void Coach::follow_waypoints(const int& id, const QList<rcsc::Vector2D>& waypoin
     if (state == waypoints.size()-1 && robot_pos.dist(waypoints[state]) < arrived_dist)
         state = 0;
 
-    extern_skill_handler->gotopoint_avoid(id, waypoints[state], waypoints[state]);
-
+    return control_tool::calculate_attraction_classic(robot_pos, waypoints[state], extern_attraction_radius, extern_attraction_step);
 }
 
 
