@@ -38,7 +38,9 @@ private:
     int waypoints_state;
 
     // formation control
-    void formation_acquisition(const std::vector<int>& robot_ids, const Graph& formation, const double& step);
+    // this function gets a formation graph and the desired robot IDs then computes the desired velocities to form the formation
+    // desired velocities are stored in the vels input. the function returns sum of the formation errors
+    double formation_acquisition(const std::vector<int>& robot_ids, const Graph& formation, const double& step, std::vector<rcsc::Vector2D>& vels);
     Graph formation_gr1;
 
 };

@@ -25,21 +25,23 @@ Coach::~Coach() = default;
 
 void Coach::execute()
 {
-    formation_acquisition({0, 1, 2, 3}, formation_gr1, extern_formation_acquisition_step);
-    extern_sandbox_msg->data1 = extern_wm->our[ID(0)].pos.x;
+    std::vector<rcsc::Vector2D> vels;
+    std::vector<int> ids{0, 1, 2, 3};
+    formation_acquisition(ids, formation_gr1, extern_formation_acquisition_step, vels);
+    for (int i{}; i < static_cast<int>(ids.size()); i++)
+        extern_skill_handler->direct_velocity(ids[i], vels[i]);
 }
 
-void Coach::formation_acquisition(const std::vector<int>& robot_ids, const Graph& formation, const double& step)
+double Coach::formation_acquisition(const std::vector<int>& robot_ids, const Graph& formation, const double& step, std::vector<rcsc::Vector2D>& vels)
 {
     if (formation.vertices_num() != robot_ids.size())
     {
         qDebug() << "[ai_node] attempt to acquire a formation with different number of vertices and robots!";
-        return;
+        return -1;
     }
 
     int size = static_cast<int>(formation.vertices_num());
-    std::vector<rcsc::Vector2D> robot_vels;
-    robot_vels.resize(size, rcsc::Vector2D{0, 0});
+    vels.resize(size, rcsc::Vector2D{0, 0});
 
     // calculate robots' velocities
     for (int i{}; i < size; i++)
@@ -47,12 +49,9 @@ void Coach::formation_acquisition(const std::vector<int>& robot_ids, const Graph
             if (formation.are_neighbors(i, j))
             {
                 rcsc::Vector2D qtilda = extern_wm->our[ID(robot_ids[i])].pos - extern_wm->our[ID(robot_ids[j])].pos;
-                robot_vels[i] += -step * qtilda*(qtilda.length()*qtilda.length() - formation.get_dist(i, j)*formation.get_dist(i, j));
+                vels[i] += -step * qtilda*(qtilda.length()*qtilda.length() - formation.get_dist(i, j)*formation.get_dist(i, j));
             }
-
-    // send velocities for robots
-    for (int i{}; i < size; i++)
-        extern_skill_handler->direct_velocity(robot_ids[i], robot_vels[i]);
+    return 0;
 }
 
 int Coach::ID(int id)
