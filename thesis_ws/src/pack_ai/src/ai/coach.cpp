@@ -27,7 +27,7 @@ void Coach::execute()
 {
     std::vector<rcsc::Vector2D> vels;
     std::vector<int> ids{0, 1, 2, 3};
-    formation_acquisition(ids, formation_gr1, extern_formation_acquisition_step, vels);
+    double error = formation_acquisition(ids, formation_gr1, extern_formation_acquisition_step, vels);
     for (int i{}; i < static_cast<int>(ids.size()); i++)
         extern_skill_handler->direct_velocity(ids[i], vels[i]);
 }
@@ -43,15 +43,18 @@ double Coach::formation_acquisition(const std::vector<int>& robot_ids, const Gra
     int size = static_cast<int>(formation.vertices_num());
     vels.resize(size, rcsc::Vector2D{0, 0});
 
+    double error{};
     // calculate robots' velocities
     for (int i{}; i < size; i++)
         for (int j{}; j < size; j++)
             if (formation.are_neighbors(i, j))
             {
                 rcsc::Vector2D qtilda = extern_wm->our[ID(robot_ids[i])].pos - extern_wm->our[ID(robot_ids[j])].pos;
-                vels[i] += -step * qtilda*(qtilda.length()*qtilda.length() - formation.get_dist(i, j)*formation.get_dist(i, j));
+                double d = formation.get_dist(i, j);
+                vels[i] += -step * qtilda*(qtilda.length()*qtilda.length() - d*d);
+                error += fabs(qtilda.length() - d);
             }
-    return 0;
+    return error;
 }
 
 int Coach::ID(int id)
