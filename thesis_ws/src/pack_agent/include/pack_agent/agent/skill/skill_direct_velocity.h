@@ -6,7 +6,8 @@
 #define PACK_AGENT_DIRECT_VELOCITY_H
 
 #include "pack_agent/agent/skill/skill.h"
-#include "pack_agent/agent/skill/control_tools.h"
+#include "pack_util/control/general.h"
+#include "pack_util/control/pid.h"
 #include "pack_msgs/msg/skill_direct_velocity.hpp"
 
 #include <QDebug>

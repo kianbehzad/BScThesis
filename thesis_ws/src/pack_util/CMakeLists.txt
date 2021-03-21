@@ -95,6 +95,22 @@ ament_export_dependencies(
         rclcpp
 )
 
+# create libcontrol library
+add_library(libcontrol
+        src/control/general.cpp
+        src/control/pid.cpp
+        src/control/potential_field.cpp
+        )
+ament_target_dependencies(libcontrol rclcpp pack_msgs)
+target_link_libraries(libcontrol ${QT5_LIBRARIES} libgeom)
+ament_export_targets(export_libcontrol HAS_LIBRARY_TARGET)
+ament_export_libraries(libcontrol)
+ament_export_include_directories(include)
+ament_export_dependencies(
+        ament_cmake
+        rclcpp
+)
+
 
 # install include directory
 install(
@@ -126,6 +142,15 @@ install(
 install(
         TARGETS libknowledge
         EXPORT export_libknowledge
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib
+        RUNTIME DESTINATION bin
+        INCLUDES DESTINATION include
+)
+# install libcontrol
+install(
+        TARGETS libcontrol
+        EXPORT export_libcontrol
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib
         RUNTIME DESTINATION bin

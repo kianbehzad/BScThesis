@@ -45,7 +45,7 @@ agent_param_node:
     temp_value2: 0.0
 ai_node:
   ros__parameters:
-    formation_acquisition_step: 4.6
+    formation_acquisition_step: 1.5
     temp_value1: 0.0
     temp_value2: 0.0
 

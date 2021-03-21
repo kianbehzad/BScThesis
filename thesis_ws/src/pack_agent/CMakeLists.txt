@@ -42,7 +42,6 @@ include_directories(
 add_executable(agent
         src/agent/agent_exec.cpp
         src/agent/agent_node.cpp
-        src/agent/skill/control_tools.cpp
         src/agent/skill/skill.cpp
         src/agent/skill/skill_gotopoint.cpp
         src/agent/skill/skill_gotopoint_avoid.cpp

@@ -6,7 +6,9 @@
 #define PACK_AGENT_SKILL_GOTOPOINT_AVOID_H
 
 #include "pack_agent/agent/skill/skill.h"
-#include "pack_agent/agent/skill/control_tools.h"
+#include "pack_util/control/general.h"
+#include "pack_util/control/pid.h"
+#include "pack_util/control/potential_field.h"
 #include "pack_util/geom/segment_2d.h"
 #include "pack_util/core/field.h"
 #include "pack_msgs/msg/skill_goto_point_avoid.hpp"
