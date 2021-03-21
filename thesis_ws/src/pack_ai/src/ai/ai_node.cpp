@@ -8,7 +8,12 @@ pack_msgs::msg::WorldModel::SharedPtr extern_wm;
 Drawer* extern_drawer;
 SkillHandler* extern_skill_handler;
 pack_msgs::msg::SandBox* extern_sandbox_msg;
-double extern_formation_acquisition_step = 4.6;
+double extern_formation_acquisition_step = 5.0;
+double extern_attraction_radius = 10.0;
+double extern_attraction_step = 1.5;
+double extern_repulsion_static_radius = 0.5;
+double extern_repulsion_static_step = 100.0;
+double extern_repulsion_static_prediction = 0.4;
 double extern_temp_value1 = 0;
 double extern_temp_value2 = 0;
 
@@ -30,6 +35,11 @@ AINode::AINode(const rclcpp::NodeOptions & options) : Node("ai_node", options)
 
     // get parameter initial values
     extern_formation_acquisition_step = parameters_client->get_parameter("formation_acquisition_step", extern_formation_acquisition_step);
+    extern_attraction_radius = parameters_client->get_parameter("attraction_radius", extern_attraction_radius);
+    extern_attraction_step = parameters_client->get_parameter("attraction_step", extern_attraction_step);
+    extern_repulsion_static_radius = parameters_client->get_parameter("repulsion_static_radius", extern_repulsion_static_radius);
+    extern_repulsion_static_step = parameters_client->get_parameter("repulsion_static_step", extern_repulsion_static_step);
+    extern_repulsion_static_prediction = parameters_client->get_parameter("repulsion_static_prediction", extern_repulsion_static_prediction);
     extern_temp_value1 = parameters_client->get_parameter("temp_value1", extern_temp_value1);
     extern_temp_value2 = parameters_client->get_parameter("temp_value2", extern_temp_value2);
 
@@ -85,7 +95,32 @@ void AINode::define_params_change_callback_lambda_function()
                 extern_formation_acquisition_step = changed_parameter.value.double_value;
                 if(extern_formation_acquisition_step == 0)  extern_formation_acquisition_step = changed_parameter.value.integer_value;//double_value gives 0 if the input has no decimals
             }
-            if(changed_parameter.name == "temp_value1")
+            else if(changed_parameter.name == "attraction_radius")
+            {
+                extern_attraction_radius = changed_parameter.value.double_value;
+                if(extern_temp_value1 == 0)  extern_attraction_radius = changed_parameter.value.integer_value;//double_value gives 0 if the input has no decimals
+            }
+            else if(changed_parameter.name == "attraction_step")
+            {
+                extern_attraction_step = changed_parameter.value.double_value;
+                if(extern_temp_value1 == 0)  extern_attraction_step = changed_parameter.value.integer_value;//double_value gives 0 if the input has no decimals
+            }
+            else if(changed_parameter.name == "repulsion_static_radius")
+            {
+                extern_repulsion_static_radius = changed_parameter.value.double_value;
+                if(extern_temp_value1 == 0)  extern_repulsion_static_radius = changed_parameter.value.integer_value;//double_value gives 0 if the input has no decimals
+            }
+            else if(changed_parameter.name == "repulsion_static_step")
+            {
+                extern_repulsion_static_step = changed_parameter.value.double_value;
+                if(extern_temp_value1 == 0)  extern_repulsion_static_step = changed_parameter.value.integer_value;//double_value gives 0 if the input has no decimals
+            }
+            else if(changed_parameter.name == "repulsion_static_prediction")
+            {
+                extern_repulsion_static_prediction = changed_parameter.value.double_value;
+                if(extern_temp_value1 == 0)  extern_repulsion_static_prediction = changed_parameter.value.integer_value;//double_value gives 0 if the input has no decimals
+            }
+            else if(changed_parameter.name == "temp_value1")
             {
                 extern_temp_value1 = changed_parameter.value.double_value;
                 if(extern_temp_value1 == 0)  extern_temp_value1 = changed_parameter.value.integer_value;//double_value gives 0 if the input has no decimals

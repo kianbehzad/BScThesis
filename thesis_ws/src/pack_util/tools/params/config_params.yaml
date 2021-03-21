@@ -45,7 +45,12 @@ agent_param_node:
     temp_value2: 0.0
 ai_node:
   ros__parameters:
-    formation_acquisition_step: 1.5
+    formation_acquisition_step: 5.0
+    attraction_radius: 10.0
+    attraction_step: 1.5
+    repulsion_static_radius: 0.5
+    repulsion_static_step: 100.0
+    repulsion_static_prediction: 0.4
     temp_value1: 0.0
     temp_value2: 0.0
 
