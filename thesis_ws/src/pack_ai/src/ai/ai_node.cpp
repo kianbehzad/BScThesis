@@ -14,6 +14,9 @@ double extern_attraction_step = 1.5;
 double extern_repulsion_static_radius = 0.5;
 double extern_repulsion_static_step = 100.0;
 double extern_repulsion_static_prediction = 0.4;
+double extern_P_angle = 1;
+double extern_I_angle = 0;
+double extern_D_angle = 0;
 double extern_temp_value1 = 0;
 double extern_temp_value2 = 0;
 
@@ -40,6 +43,9 @@ AINode::AINode(const rclcpp::NodeOptions & options) : Node("ai_node", options)
     extern_repulsion_static_radius = parameters_client->get_parameter("repulsion_static_radius", extern_repulsion_static_radius);
     extern_repulsion_static_step = parameters_client->get_parameter("repulsion_static_step", extern_repulsion_static_step);
     extern_repulsion_static_prediction = parameters_client->get_parameter("repulsion_static_prediction", extern_repulsion_static_prediction);
+    extern_P_angle = parameters_client->get_parameter("P_angle", extern_P_angle);
+    extern_I_angle = parameters_client->get_parameter("I_angle", extern_I_angle);
+    extern_D_angle = parameters_client->get_parameter("D_angle", extern_D_angle);
     extern_temp_value1 = parameters_client->get_parameter("temp_value1", extern_temp_value1);
     extern_temp_value2 = parameters_client->get_parameter("temp_value2", extern_temp_value2);
 
@@ -119,6 +125,21 @@ void AINode::define_params_change_callback_lambda_function()
             {
                 extern_repulsion_static_prediction = changed_parameter.value.double_value;
                 if(extern_temp_value1 == 0)  extern_repulsion_static_prediction = changed_parameter.value.integer_value;//double_value gives 0 if the input has no decimals
+            }
+            else if(changed_parameter.name == "P_angle")
+            {
+                extern_P_angle = changed_parameter.value.double_value;
+                if(extern_P_angle == 0)  extern_P_angle = changed_parameter.value.integer_value;//double_value gives 0 if the input has no decimals
+            }
+            else if(changed_parameter.name == "I_angle")
+            {
+                extern_I_angle = changed_parameter.value.double_value;
+                if(extern_I_angle == 0)  extern_I_angle = changed_parameter.value.integer_value;//double_value gives 0 if the input has no decimals
+            }
+            else if(changed_parameter.name == "D_angle")
+            {
+                extern_D_angle = changed_parameter.value.double_value;
+                if(extern_D_angle == 0)  extern_D_angle = changed_parameter.value.integer_value;//double_value gives 0 if the input has no decimals
             }
             else if(changed_parameter.name == "temp_value1")
             {

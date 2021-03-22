@@ -51,6 +51,9 @@ ai_node:
     repulsion_static_radius: 0.5
     repulsion_static_step: 100.0
     repulsion_static_prediction: 0.4
+    P_angle: 0.21
+    I_angle: 0.00001
+    D_angle: 0.5
     temp_value1: 0.0
     temp_value2: 0.0
 

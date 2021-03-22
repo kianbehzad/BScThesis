@@ -20,6 +20,9 @@ extern double extern_attraction_step;
 extern double extern_repulsion_static_radius;
 extern double extern_repulsion_static_step;
 extern double extern_repulsion_static_prediction;
+extern double extern_P_angle;
+extern double extern_I_angle;
+extern double extern_D_angle;
 extern double extern_temp_value1;
 extern double extern_temp_value2;
 
