@@ -35,7 +35,6 @@ void Coach::execute()
 
     // formation maneuvering according to vd and wd
     double formation_error = formation_maneuvering(ids, formation_gr1, {0, 0}, extern_formation_acquisition_step, vd, wd);
-
 }
 
 double Coach::formation_acquisition(const std::vector<int>& robot_ids,
@@ -71,7 +70,7 @@ double Coach::formation_maneuvering(const std::vector<int>& robot_ids,
                                     const rcsc::Vector2D& look_at,
                                     const double& acquisition_step,
                                     const rcsc::Vector2D& vel_d,
-                                    const double& w_d) // TODO add w_d functionality
+                                    const double& w_d)
 {
     // check the size
     if (formation.vertices_num() != robot_ids.size() || formation.vertices_num() == 0)
@@ -128,6 +127,18 @@ double Coach::formation_angle_control(const std::vector<int>& robot_ids, const r
     wd = pid_formation_rotation->execute(error);
 
     return wd;
+}
+
+rcsc::Vector2D Coach::formation_position_control(const std::vector<int>& robot_ids, const rcsc::Vector2D& destination)
+{
+    if (robot_ids.empty())
+    {
+        qDebug() << "[ai_node] attempt to control angle if a formation with zero robots!";
+        return {0, 0};
+    }
+
+    rcsc::Vector2D robot_pos = extern_wm->our[ID(robot_ids[0])].pos;
+    return control_tool::calculate_attraction_classic(robot_pos, destination, extern_attraction_radius, extern_attraction_step);
 }
 
 int Coach::ID(int id)

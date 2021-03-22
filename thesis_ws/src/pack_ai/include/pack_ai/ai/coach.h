@@ -70,6 +70,12 @@ private:
     double formation_angle_control(const std::vector<int>& robot_ids, const rcsc::Vector2D& desired_direction);
     control_tool::PID* pid_formation_rotation;
 
+    // gets the id of the robots in the formation and a desired destination
+    // we want robot0 from formation be placed in destination while maintaining the global formation
+    // with robot0 in the formation
+    // the function calculates the needed v_d velocity that the formation should have to achieve its desired_destination
+    rcsc::Vector2D formation_position_control(const std::vector<int>& robot_ids, const rcsc::Vector2D& destination);
+
     Graph formation_gr1;
 
 };
