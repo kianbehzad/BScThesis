@@ -63,7 +63,7 @@ double Coach::formation_acquisition(const std::vector<int>& robot_ids,
                 vels[i] += -step * qtilda*(qtilda.length()*qtilda.length() - d*d);
                 error += fabs(qtilda.length() - d);
             }
-    return error/formation.get_edges().size();
+    return error/(formation.get_edges().size()*2.0);
 }
 
 double Coach::formation_maneuvering(const std::vector<int>& robot_ids,
@@ -107,6 +107,11 @@ double Coach::formation_maneuvering(const std::vector<int>& robot_ids,
 
 double Coach::formation_angle_control(const std::vector<int>& robot_ids, const rcsc::Vector2D& desired_direction)
 {
+    if (robot_ids.empty())
+    {
+        qDebug() << "[ai_node] attempt to control angle if a formation with zero robots!";
+        return 0;
+    }
     double wd = 0;
     // calculate the middle point of the formation
     rcsc::Vector2D middle{0, 0};
