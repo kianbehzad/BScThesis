@@ -23,9 +23,9 @@ void Coach::execute()
 {
     std::vector<rcsc::Vector2D> vels;
     std::vector<int> ids{0, 1, 2};
-    //rcsc::Vector2D vd = follow_waypoints(ids[0], {{2, -2}, {2, 2}, {-2, 2}, {-2, -2}});
-    double error = formation_maneuvering(ids, formation_gr1, {0, 0}, extern_formation_acquisition_step, {0, 0}, extern_temp_value1);
-    
+    rcsc::Vector2D vd = follow_waypoints(ids[0], {{2, -2}, {2, 2}, {-2, 2}, {-2, -2}});
+    double error = formation_maneuvering(ids, formation_gr1, {0, 0}, extern_formation_acquisition_step, vd, extern_temp_value1);
+    extern_sandbox_msg->data1 = error;
 }
 
 double Coach::formation_acquisition(const std::vector<int>& robot_ids,
@@ -53,7 +53,7 @@ double Coach::formation_acquisition(const std::vector<int>& robot_ids,
                 vels[i] += -step * qtilda*(qtilda.length()*qtilda.length() - d*d);
                 error += fabs(qtilda.length() - d);
             }
-    return error;
+    return error/formation.get_edges().size();
 }
 
 double Coach::formation_maneuvering(const std::vector<int>& robot_ids,
@@ -81,7 +81,7 @@ double Coach::formation_maneuvering(const std::vector<int>& robot_ids,
         // translation i.e. flocking
         vels[i] += vel_d;
         // rotation
-        if (error < 2)
+        if (error < 0.6)
         {
             rcsc::Vector2D leader_robot = extern_wm->our[ID(robot_ids[0])].pos - extern_wm->our[ID(robot_ids[i])].pos;
             leader_robot = leader_robot.rotate(-90).setLengthVector(1);

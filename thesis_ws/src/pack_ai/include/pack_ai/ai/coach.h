@@ -45,7 +45,8 @@ private:
     // formation control
 
     // this function gets a formation graph and the desired robot IDs then computes the desired velocities to form the formation
-    // desired velocities are stored in the vels input. the function returns sum of the formation errors
+    // desired velocities are stored in the vels input.
+    // the function returns mean error of the formation i.e. (sum of errors/number of edges)
     double formation_acquisition(const std::vector<int>& robot_ids,
                                  const Graph& formation,
                                  const double& step,
@@ -54,7 +55,7 @@ private:
     // this function uses formation_acquisition to form a formation with robots and then moves it with:
     // vel_d - is the translation velocity of the formation
     // w_d - is the rotational velocity of the formation with vertex 0 as rotational axes
-    // the function returns sum of the formation errors
+    // the function returns mean error of the formation i.e. (sum of errors/number of edges)
     double formation_maneuvering(const std::vector<int>& robot_ids,
                                  const Graph& formation,
                                  const rcsc::Vector2D& look_at,
