@@ -10,6 +10,7 @@
 #include "pack_util/geom/segment_2d.h"
 #include "pack_util/geom/rect_2d.h"
 #include "pack_util/control/potential_field.h"
+#include "pack_util/control/pid.h"
 #include "pack_ai/ai/extern_variables.h"
 #include "pack_ai/ai/tools/graph.h"
 
@@ -62,6 +63,13 @@ private:
                                  const double& acquisition_step,
                                  const rcsc::Vector2D& vel_d,
                                  const double& w_d);
+
+    // gets the id of the robots in the formation and a desired direction that we want all the robots be placed in relation
+    // with robot0 in the formation
+    // the function calculates the needed w_d velocity that the formation should rotate to achieve its desired_direction
+    double formation_angle_control(const std::vector<int>& robot_ids, const rcsc::Vector2D& desired_direction);
+    control_tool::PID* pid_formation_rotation;
+
     Graph formation_gr1;
 
 };

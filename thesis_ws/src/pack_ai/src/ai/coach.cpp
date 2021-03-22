@@ -15,17 +15,27 @@ Coach::Coach()
     formation_gr1.add_edge(0, 1);
     formation_gr1.add_edge(0, 2);
     formation_gr1.add_edge(1, 2);
+
+    pid_formation_rotation = new control_tool::PID(3, 3, 1);
 }
 
 Coach::~Coach() = default;
 
 void Coach::execute()
 {
+    // initialize needed values
     std::vector<rcsc::Vector2D> vels;
     std::vector<int> ids{0, 1, 2};
+
+    // calculate the translational velocity for agents in formation (vd)
     rcsc::Vector2D vd = follow_waypoints(ids[0], {{2, -2}, {2, 2}, {-2, 2}, {-2, -2}});
-    double error = formation_maneuvering(ids, formation_gr1, {0, 0}, extern_formation_acquisition_step, vd, extern_temp_value1);
-    extern_sandbox_msg->data1 = error;
+
+    // calculate the rotational velocity for agents in formation (wd)
+    double wd = formation_angle_control(ids, {0, -1});
+
+    // formation maneuvering according to vd and wd
+    double formation_error = formation_maneuvering(ids, formation_gr1, {0, 0}, extern_formation_acquisition_step, vd, wd);
+
 }
 
 double Coach::formation_acquisition(const std::vector<int>& robot_ids,
@@ -93,6 +103,26 @@ double Coach::formation_maneuvering(const std::vector<int>& robot_ids,
     for (int i{}; i<size; i++)
         extern_skill_handler->direct_velocity(robot_ids[i], vels[i], look_at);
     return error;
+}
+
+double Coach::formation_angle_control(const std::vector<int>& robot_ids, const rcsc::Vector2D& desired_direction)
+{
+    double wd = 0;
+    // calculate the middle point of the formation
+    rcsc::Vector2D middle{0, 0};
+    for (const auto& id : robot_ids)
+        middle += extern_wm->our[ID(id)].pos;
+    middle /= robot_ids.size();
+
+    // control middle point to be on the desired_direction
+    rcsc::Vector2D middole_vec = middle - extern_wm->our[ID(robot_ids[0])].pos;
+    double error = rcsc::Vector2D::angleBetween_customized(middole_vec, desired_direction, true).degree();
+    pid_formation_rotation->set_p(extern_P_angle);
+    pid_formation_rotation->set_i(extern_I_angle);
+    pid_formation_rotation->set_d(extern_D_angle);
+    wd = pid_formation_rotation->execute(error);
+
+    return wd;
 }
 
 int Coach::ID(int id)
